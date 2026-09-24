@@ -262,6 +262,18 @@ class Forms::WelshPageTranslationInput < BaseInput
     page.answer_type == "selection"
   end
 
+  def hide_selection_option_fields?
+    selection_options_cy.size > 30
+  end
+
+  def has_translated_selection_options?
+    selection_options_cy.filter { |option| option.name_cy.present? }.any?
+  end
+
+  def translated_selection_options_without_errors
+    selection_options_cy.filter { |option| option.name_cy.present? && option.errors.none? }
+  end
+
   # We need to normalize the Welsh answer settings to match the English ones.
   # The only answer settings that need translating are the selection options
   # We ensure that welsh answer settings are correct by copying the English

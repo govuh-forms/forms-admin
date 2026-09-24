@@ -721,6 +721,38 @@ RSpec.describe Forms::WelshPageTranslationInput, type: :model do
     end
   end
 
+  describe "#hide_selection_option_fields?" do
+    context "when the page has 30 selection options" do
+      let(:page) do
+        options = 30.times.map { |i| { name: "Option #{i + 1}", value: "Option #{i + 1}" } }
+        create_page(answer_type: "selection", answer_settings: { only_one_option: "true", selection_options: options })
+      end
+      let(:new_input_data) do
+        attrs = 30.times.each_with_object({}) { |i, h| h[i.to_s] = { "id" => i.to_s, "name_cy" => "Welsh option #{i + 1}" } }
+        super().merge(selection_options_cy_attributes: attrs)
+      end
+
+      it "returns false" do
+        expect(welsh_page_translation_input.hide_selection_option_fields?).to be false
+      end
+    end
+
+    context "when the page has more than 30 selection options" do
+      let(:page) do
+        options = 31.times.map { |i| { name: "Option #{i + 1}", value: "Option #{i + 1}" } }
+        create_page(answer_type: "selection", answer_settings: { only_one_option: "true", selection_options: options })
+      end
+      let(:new_input_data) do
+        attrs = 31.times.each_with_object({}) { |i, h| h[i.to_s] = { "id" => i.to_s, "name_cy" => "Welsh option #{i + 1}" } }
+        super().merge(selection_options_cy_attributes: attrs)
+      end
+
+      it "returns true" do
+        expect(welsh_page_translation_input.hide_selection_option_fields?).to be true
+      end
+    end
+  end
+
   describe "#all_fields_empty?" do
     context "when the welsh page fields are not empty" do
       it "returns false" do
