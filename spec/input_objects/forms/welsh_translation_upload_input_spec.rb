@@ -81,7 +81,7 @@ RSpec.describe Forms::WelshTranslationUploadInput do
       it "returns false and adds an error" do
         input = described_class.new(form: form, file: file)
         expect(input.read_file).to be false
-        expect(input.errors.full_messages_for(:file)).to include("File The CSV has invalid formatting - try downloading a new version, then uploading it again")
+        expect(input.errors.full_messages_for(:file)).to include("File The CSV is not formatted correctly. Download a new version of the CSV, then make your changes and upload it.")
       end
     end
 
@@ -93,7 +93,7 @@ RSpec.describe Forms::WelshTranslationUploadInput do
       it "returns false and adds an error" do
         input = described_class.new(form: form, file: file)
         expect(input.read_file).to be false
-        expect(input.errors.full_messages_for(:file)).to include("File File is not in CSV UTF-8 format - in Excel, go to ‘File’ then ‘Save as’")
+        expect(input.errors.full_messages_for(:file)).to include("File The selected file must be in CSV UTF-8 format. In Excel, select ‘File’, then ‘Save as’, then select ‘CSV UTF-8’ as the file type.")
       end
     end
 
@@ -105,7 +105,7 @@ RSpec.describe Forms::WelshTranslationUploadInput do
       it "returns false and adds an error" do
         input = described_class.new(form: form, file: file)
         expect(input.read_file).to be false
-        expect(input.errors.full_messages_for(:file)).to include("File We couldn’t upload the CSV because the column headings are wrong - check them and try uploading again")
+        expect(input.errors.full_messages_for(:file)).to include("File The column headings in the CSV have been changed. Download a new version of the CSV, then make your changes and upload it.")
       end
     end
 
@@ -117,7 +117,7 @@ RSpec.describe Forms::WelshTranslationUploadInput do
       it "returns false and adds an error" do
         input = described_class.new(form: form, file: file)
         expect(input.read_file).to be false
-        expect(input.errors.full_messages_for(:file)).to include("File There’s a different number of options for the English and Welsh versions of Question 2 - try downloading a new CSV of the existing content, then uploading it again")
+        expect(input.errors.full_messages_for(:file)).to include("File The number of options for question 2 in the CSV does not match your form. Download a new version of the CSV, then make your changes and upload it.")
       end
     end
 
@@ -129,7 +129,7 @@ RSpec.describe Forms::WelshTranslationUploadInput do
       it "returns false and adds an error" do
         input = described_class.new(form: form, file: file)
         expect(input.read_file).to be false
-        expect(input.errors.full_messages_for(:file)).to include("File For the list options in question 2, the English and Welsh versions do not match - try downloading a new CSV of the existing content, then uploading it again")
+        expect(input.errors.full_messages_for(:file)).to include("File The English options for question 2 in the CSV do not match your form. Download a new version of the CSV, then make your changes and upload it.")
       end
     end
 
@@ -141,7 +141,7 @@ RSpec.describe Forms::WelshTranslationUploadInput do
       it "returns false and adds an error" do
         input = described_class.new(form: form, file: file)
         expect(input.read_file).to be false
-        expect(input.errors.full_messages_for(:file)).to include("File Question 2 is missing Welsh translations for one or more options - add them, then try uploading the CSV again")
+        expect(input.errors.full_messages_for(:file)).to include("File Question 2 is missing Welsh translations for one or more options. Add the missing translations, then upload the CSV again.")
       end
     end
 
@@ -154,7 +154,7 @@ RSpec.describe Forms::WelshTranslationUploadInput do
         input = described_class.new(form: form, file: file)
         expect(input.read_file).to be false
         expect(input.errors).to be_of_kind(:file, :form_content_not_found)
-        expect(input.errors.full_messages_for(:file)).to include("File It looks like the form has changed since you downloaded the CSV of existing content - try downloading a new version, then uploading it again")
+        expect(input.errors.full_messages_for(:file)).to include("File The form has changed since you downloaded the CSV. Download a new version of the CSV, then make your changes and upload it.")
         expect(input.error_row_number).to eq 2
       end
     end
@@ -168,7 +168,7 @@ RSpec.describe Forms::WelshTranslationUploadInput do
         input = described_class.new(form: form, file: file)
         expect(input.read_file).to be false
         expect(input.errors).to be_of_kind(:file, :question_text_mismatch)
-        expect(input.errors.full_messages_for(:file)).to include("File It looks like the form has changed since you downloaded the CSV of existing content - try downloading a new version, then uploading it again")
+        expect(input.errors.full_messages_for(:file)).to include("File The form has changed since you downloaded the CSV. Download a new version of the CSV, then make your changes and upload it.")
         expect(input.error_row_number).to eq 2
       end
     end
@@ -182,7 +182,7 @@ RSpec.describe Forms::WelshTranslationUploadInput do
         input = described_class.new(form: form, file: file)
         expect(input.read_file).to be false
         expect(input.errors).to be_of_kind(:file, :exit_page_heading_mismatch)
-        expect(input.errors.full_messages_for(:file)).to include("File It looks like the form has changed since you downloaded the CSV of existing content - try downloading a new version, then uploading it again")
+        expect(input.errors.full_messages_for(:file)).to include("File The form has changed since you downloaded the CSV. Download a new version of the CSV, then make your changes and upload it.")
         expect(input.error_row_number).to eq 2
       end
     end
