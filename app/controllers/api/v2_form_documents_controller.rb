@@ -1,6 +1,6 @@
 class Api::V2FormDocumentsController < ApplicationController
   def show
-    render json: form_document.content
+    render json: form_document.content.merge("version" => form_document.version)
   end
 
 private

@@ -25,6 +25,7 @@ RSpec.describe Api::V2FormDocumentsController, type: :request do
           expect(response.parsed_body).to include({
             form_id: form.id.to_s,
             name: draft_form_name,
+            version: nil,
           })
         end
 
@@ -50,6 +51,7 @@ RSpec.describe Api::V2FormDocumentsController, type: :request do
           get("/api/v2/forms/#{form.id}/live", headers:)
           expect(response.parsed_body).to include({
             name: "v3 form",
+            version: 3,
           })
         end
 
@@ -87,6 +89,7 @@ RSpec.describe Api::V2FormDocumentsController, type: :request do
           get("/api/v2/forms/#{form.id}/archived")
           expect(response.parsed_body).to include({
             name: "v3 form",
+            version: 3,
           })
         end
 
