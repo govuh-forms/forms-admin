@@ -578,6 +578,47 @@ describe StepSummaryCardService do
             )
           end
         end
+
+        context "with an exit page" do
+          let(:exit_page) { create :exit_page, question_page: page }
+
+          before do
+            create :condition, :with_exit_page, exit_page:, routing_page: page, check_page: page, answer_value: "Option 1"
+
+            page.reload
+            form.reload.make_live!
+          end
+
+          it "returns the correct options" do
+            expect(step_summary_card_service.all_options_for_answer_type.last).to eq(
+              {
+                key: { text: I18n.t("page_conditions.route2", count: 1) },
+                value: { text: "<p class=\"govuk-body-s\">Go to exit page 1, ‘#{exit_page.heading}’ if the answer is:</p><ul class=\"govuk-list govuk-list--bullet govuk-!-static-margin-bottom-4\"><li>‘Option 1’</li></ul>" },
+              },
+            )
+          end
+        end
+
+        context "with exit pages" do
+          let(:exit_pages) { create_list :exit_page, 2, question_page: page }
+
+          before do
+            create :condition, :with_exit_page, exit_page: exit_pages.first, routing_page: page, check_page: page, answer_value: "Option 1"
+            create :condition, :with_exit_page, exit_page: exit_pages.second, routing_page: page, check_page: page, answer_value: "Option 2"
+
+            page.reload
+            form.reload.make_live!
+          end
+
+          it "returns the correct options" do
+            expect(step_summary_card_service.all_options_for_answer_type.last).to eq(
+              {
+                key: { text: I18n.t("page_conditions.route2", count: 2) },
+                value: { text: "<p class=\"govuk-body-s\">Go to exit page 1, ‘#{exit_pages.first.heading}’ if the answer is:</p><ul class=\"govuk-list govuk-list--bullet govuk-!-static-margin-bottom-4\"><li>‘Option 1’</li></ul><p class=\"govuk-body-s\">Go to exit page 2, ‘#{exit_pages.second.heading}’ if the answer is:</p><ul class=\"govuk-list govuk-list--bullet govuk-!-static-margin-bottom-4\"><li>‘Option 2’</li></ul>" },
+              },
+            )
+          end
+        end
       end
 
       context "with an exit page" do
