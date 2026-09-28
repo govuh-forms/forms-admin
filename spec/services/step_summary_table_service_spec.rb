@@ -479,6 +479,44 @@ describe StepSummaryTableService do
           ),
         )
       end
+
+      context "when the form document uses old-style exit pages" do
+        let(:form_document_step) { form_document_steps[1] }
+
+        before do
+          downgrade = lambda do |form_document|
+            form_document.content["steps"].each do |step|
+              step["routing_conditions"].each do |condition|
+                condition.delete("exit_page_id")
+              end
+              step.delete("exit_pages")
+            end
+          end
+
+          downgrade.call(form.latest_form_document)
+          downgrade.call(form.latest_welsh_form_document)
+        end
+
+        it "includes the exit page caption in the routes row" do
+          expect(step_summary_table_service.values_with_welsh_content2).to include(
+            a_hash_including(
+              include(
+                I18n.t("page_conditions.go_to_exit_page", exit_page_index: 1, exit_page_heading: "You are not eligible"),
+              ),
+            ),
+          )
+        end
+
+        it "includes the Welsh exit page caption in the routes row" do
+          expect(step_summary_table_service.values_with_welsh_content2).to include(
+            a_hash_including(
+              include(
+                I18n.t("page_conditions.go_to_exit_page", exit_page_index: 1, exit_page_heading: "Nid ydych yn gymwys"),
+              ),
+            ),
+          )
+        end
+      end
     end
   end
 
