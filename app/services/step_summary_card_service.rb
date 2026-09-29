@@ -321,7 +321,7 @@ private
   end
 
   def exit_page_groups(ordered_conditions)
-    ordered_conditions
+    exit_page_groups = ordered_conditions
       .select { |condition| condition.exit_page_id.present? }
       .group_by(&:exit_page_id)
       .values
@@ -336,6 +336,22 @@ private
           exit_page:,
         }
       end
+
+    if exit_page_groups.any?
+      exit_page_groups
+    elsif (old_style_condition = ordered_conditions.find { it.exit_page_heading.present? && it.exit_page_id.nil? })
+      [{
+        group_type: :exit_page,
+        exit_page_index: 1,
+        conditions: [old_style_condition],
+        exit_page: FormDocument::ExitPage.new(
+          "heading" => old_style_condition.exit_page_heading,
+          "markdown" => old_style_condition.exit_page_markdown,
+        ),
+      }]
+    else
+      []
+    end
   end
 
   def exit_page_position_calc(exit_page)
