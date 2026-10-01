@@ -6,6 +6,7 @@ class Routes::SyncService
   def initialize(form:, routes:)
     @form = form
     @routes = routes
+    @saved_changes = nil
   end
 
   def sync_conditions_from_routes
@@ -13,6 +14,8 @@ class Routes::SyncService
       update_or_create_conditions
       destroy_stale_conditions
     end
+
+    @saved_changes if @saved_changes
   end
 
 private
@@ -32,6 +35,8 @@ private
       )
 
       condition.save!
+
+      @saved_changes |= condition.saved_changes?
     end
   end
 
@@ -49,6 +54,8 @@ private
       %i[routing_page_id answer_value] => stale_route_pairs,
     )
 
-    stale_conditions.destroy_all
+    destroyed_conditions = stale_conditions.destroy_all
+
+    @saved_changes |= destroyed_conditions.any?
   end
 end

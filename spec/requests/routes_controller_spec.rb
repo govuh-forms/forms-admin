@@ -90,6 +90,18 @@ RSpec.describe RoutesController, type: :request do
             post routes_path(form.id), params: valid_params
           }.to change { form.reload.question_section_completed? }.from(true).to(false)
         end
+
+        context "when no changes have been made to routes" do
+          it "does not mark the question section as incomplete" do
+            post routes_path(form.id), params: valid_params
+
+            form.update!(question_section_completed: true)
+
+            expect {
+              post routes_path(form.id), params: valid_params
+            }.not_to change { form.reload.question_section_completed? }.from(true)
+          end
+        end
       end
     end
 

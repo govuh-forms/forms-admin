@@ -16,6 +16,10 @@ RSpec.describe Routes::SyncService do
         expect { service.sync_conditions_from_routes }.not_to change(Condition, :count)
         expect(form.conditions.reload).to be_empty
       end
+
+      it "returns nil" do
+        expect(service.sync_conditions_from_routes).to be_nil
+      end
     end
 
     context "when creating a new condition" do
@@ -40,6 +44,10 @@ RSpec.describe Routes::SyncService do
         expect { service.sync_conditions_from_routes }.not_to change(Condition, :count)
         expect(form.conditions.reload).to be_empty
       end
+
+      it "returns true" do
+        expect(service.sync_conditions_from_routes).to be true
+      end
     end
 
     context "when updating an existing condition" do
@@ -62,6 +70,10 @@ RSpec.describe Routes::SyncService do
         # The existing condition should be updated.
         existing_condition.reload
         expect(existing_condition.goto_page_id).to eq(pages.third.id)
+      end
+
+      it "returns true" do
+        expect(service.sync_conditions_from_routes).to be true
       end
     end
 
@@ -97,6 +109,10 @@ RSpec.describe Routes::SyncService do
         service.sync_conditions_from_routes
         expect(Condition.exists?(healthy_condition.id)).to be true
       end
+
+      it "returns true" do
+        expect(service.sync_conditions_from_routes).to be true
+      end
     end
 
     context "with an answer_value of an empty string" do
@@ -111,14 +127,20 @@ RSpec.describe Routes::SyncService do
         ]
       end
 
-      it "correctly finds and destroys the condition with a nil answer_value" do
+      before do
         # This tests that the service correctly finds a condition where the answer_value is persisted as nil
         # (originally from an empty string input) and destroys it.
         # This confirms that `.presence` logic is mirrored in both create and destroy paths.
         existing_condition.update!(answer_value: nil) # Simulate how it's stored in the DB.
+      end
 
+      it "correctly finds and destroys the condition with a nil answer_value" do
         expect { service.sync_conditions_from_routes }.to change(Condition, :count).by(-1)
         expect(Condition.exists?(existing_condition.id)).to be false
+      end
+
+      it "returns true" do
+        expect(service.sync_conditions_from_routes).to be true
       end
     end
 
@@ -165,6 +187,10 @@ RSpec.describe Routes::SyncService do
 
         # 4. Kept condition is untouched
         expect(condition_to_keep.reload).to be_present
+      end
+
+      it "returns true" do
+        expect(service.sync_conditions_from_routes).to be true
       end
     end
 
