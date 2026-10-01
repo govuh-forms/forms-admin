@@ -81,6 +81,16 @@ RSpec.describe RoutesController, type: :request do
           expect(response).to redirect_to(new_exit_page_path(form, pages.first.id))
         end
       end
+
+      context "when form question section is marked as complete" do
+        it "marks the question section as incomplete" do
+          form.update!(question_section_completed: true)
+
+          expect {
+            post routes_path(form.id), params: valid_params
+          }.to change { form.reload.question_section_completed? }.from(true).to(false)
+        end
+      end
     end
 
     context "when the user is not in the form's group" do

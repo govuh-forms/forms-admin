@@ -81,7 +81,7 @@ class Form < ApplicationRecord
 
   attr_accessor :task_status_service
 
-  # Takes an optional blocl which will be called in the same transaction
+  # Takes an optional block which will be called in the same transaction
   # as the save.
   def save_question_changes!(&block)
     ActiveRecord::Base.transaction do
