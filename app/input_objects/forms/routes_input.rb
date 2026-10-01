@@ -48,9 +48,9 @@ class Forms::RoutesInput < BaseInput
   def submit
     return false if invalid?
 
-    Routes::SyncService.new(form:, routes:).sync_conditions_from_routes
+    changes_saved = Routes::SyncService.new(form:, routes:).sync_conditions_from_routes
+    form.save_question_changes! if changes_saved
 
-    form.save_draft!
     true
   end
 

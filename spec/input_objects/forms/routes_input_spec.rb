@@ -17,7 +17,7 @@ RSpec.describe Forms::RoutesInput do
 
     before do
       allow(Routes::SyncService).to receive(:new).and_return(sync_service_double)
-      allow(form).to receive(:save_draft!)
+      allow(form).to receive(:save_question_changes!)
     end
 
     it "calls the Routes::SyncService with the correct arguments" do
@@ -28,6 +28,11 @@ RSpec.describe Forms::RoutesInput do
     it "calls sync_conditions_from_routes on the service" do
       routes_input.submit
       expect(sync_service_double).to have_received(:sync_conditions_from_routes)
+    end
+
+    it "calls save_question_changes! on the form" do
+      routes_input.submit
+      expect(form).to have_received(:save_question_changes!)
     end
 
     it "returns true" do
