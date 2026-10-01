@@ -31,9 +31,9 @@ class Forms::RouteInput < BaseInput
     when GotoValue::DefaultValue
       nil
     when GotoValue::EndOfFormValue
-      { goto_page_id: nil, skip_to_end: true, check_page_id: page.id }
+      { goto_page_id: nil, skip_to_end: true, check_page_id: page.id, exit_page_id: nil, exit_page_heading: nil, exit_page_markdown: nil }
     when GotoValue::Page
-      { goto_page_id: goto.page_id, skip_to_end: false, check_page_id: page.id }
+      { goto_page_id: goto.page_id, skip_to_end: false, check_page_id: page.id, exit_page_id: nil, exit_page_heading: nil, exit_page_markdown: nil }
     when GotoValue::ExitPage
       { goto_page_id: nil, skip_to_end: false, check_page_id: page.id, exit_page_id: goto.exit_page_id }
     end

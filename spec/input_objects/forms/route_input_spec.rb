@@ -113,13 +113,13 @@ RSpec.describe Forms::RouteInput, type: :model do
 
     it "returns skip_to_end: true if the route is to the end of the form" do
       route_input.goto = check_your_answers_value
-      expect(route_input.condition_attributes).to eq({ goto_page_id: nil, skip_to_end: true, check_page_id: page.id })
+      expect(route_input.condition_attributes).to eq({ goto_page_id: nil, skip_to_end: true, check_page_id: page.id, exit_page_id: nil, exit_page_heading: nil, exit_page_markdown: nil })
     end
 
     it "returns the correct attributes if the route is to a different page" do
       route_input.goto = GotoValue::Page.new(123)
       expect(route_input.condition_attributes).to eq(
-        { goto_page_id: 123, skip_to_end: false, check_page_id: page.id },
+        { goto_page_id: 123, skip_to_end: false, check_page_id: page.id, exit_page_id: nil, exit_page_heading: nil, exit_page_markdown: nil },
       )
     end
 
