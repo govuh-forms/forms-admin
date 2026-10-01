@@ -25,7 +25,10 @@
         javascript: true
       %>
 
-      <%= f.govuk_submit t("save_and_continue") %>
+      <div class="govuk-button-group">
+        <%= f.govuk_submit t("save_and_continue") %>
+        <%= govuk_link_to t('cancel'), welsh_translation_path(current_form) %>
+      </div>
     <% end %>
   </div>
 </div>
