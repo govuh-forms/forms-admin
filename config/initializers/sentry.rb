@@ -9,6 +9,7 @@ if Settings.sentry.dsn.present?
     config.debug = true
     config.environment = Settings.sentry.environment
     config.excluded_exceptions += %w[NotFoundError]
+    config.rails.structured_logging.enabled = false
 
     filter = ActiveSupport::ParameterFilter.new(
       [EmailParameterFilterProc.new(mask: Settings.sentry.filter_mask)],
