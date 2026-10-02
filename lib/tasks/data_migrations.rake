@@ -46,11 +46,11 @@ namespace :data_migrations do
         unconditional_condition = Condition.create!(routing_page: page, check_page: page, answer_value: nil, **unconditional_goto)
 
         Rails.logger.info("#{dry_run ? 'dry run: ' : ''}replaced #{conditions_to_replace.size} conditions with condition #{unconditional_condition.id}")
+      end
 
-        if dry_run
-          Rails.logger.info("dry run: rolling back changes")
-          raise ActiveRecord::Rollback
-        end
+      if dry_run
+        Rails.logger.info("dry run: rolling back changes")
+        raise ActiveRecord::Rollback
       end
     end
   end
