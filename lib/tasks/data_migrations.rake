@@ -10,11 +10,13 @@ namespace :data_migrations do
   end
 
   desc "Replace conditions with same goto_page into unconditional route for selection questions with more than 10 options with routes"
-  task rebuild_selection_question_with_more_than_10_options_routes: :environment do
+  task :rebuild_selection_question_with_more_than_10_options_routes, %i[form_id] => :environment do |_, args|
     dry_run = ENV["DRY_RUN"]
 
     ActiveRecord::Base.transaction do
-      pages = Page.where("answer_type = 'selection' AND answer_settings->>'only_one_option' = 'true' AND jsonb_array_length(answer_settings->'selection_options') > 10")
+      pages = Page
+      pages = pages.where(form_id: args[:form_id]) if args[:form_id]
+      pages = pages.where("answer_type = 'selection' AND answer_settings->>'only_one_option' = 'true' AND jsonb_array_length(answer_settings->'selection_options') > 10")
       pages.find_each do |page|
         next if page.routing_conditions.size < 10
 
@@ -55,9 +57,10 @@ namespace :data_migrations do
 
   namespace :rebuild_selection_question_with_more_than_10_options_routes do
     desc "Replace conditions with same goto_page into unconditional route for selection questions with more than 10 options with routes - dry run"
-    task dry_run: :environment do
+    task :dry_run, [] => :environment do |_, args|
       ENV["DRY_RUN"] = "true"
-      Rake::Task["data_migrations:rebuild_selection_question_with_more_than_10_options_routes"].invoke
+
+      Rake::Task["data_migrations:rebuild_selection_question_with_more_than_10_options_routes"].invoke(*args)
     end
   end
 end
