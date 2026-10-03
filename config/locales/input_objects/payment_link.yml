@@ -6,11 +6,11 @@ en:
         forms/payment_link_input:
           attributes:
             payment_url:
-              url: Enter a link in the correct format, like https://www.gov.uk/payments/your-payment-link
+              url: Enter a payment link from the approved GOV.UH payment service
   helpers:
     hint:
       forms_payment_link_input:
-        payment_url: For example, https://www.gov.uk/payments/your-payment-link
+        payment_url: Only payment links from the approved GOV.UH payment service can be used
     label:
       forms_payment_link_input:
         payment_url: Enter the URL of your GOV.UK Pay payment link 

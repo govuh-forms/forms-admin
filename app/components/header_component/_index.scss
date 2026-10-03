@@ -5,13 +5,13 @@
   flex-wrap: wrap;
 }
 
-.app-header :is(.govuk-header__logo, .govuk-header__content) {
+.app-header :is(.govuk-generic-header__logo, .app-header__product-name) {
   @include govuk-media-query($from: desktop) {
     width: 50%;
   }
 }
 
-.govuk-header {
+.govuk-generic-header {
   &.app-header--magenta {
     border-top: 10px solid govuk-colour("magenta");
   }
@@ -23,4 +23,44 @@
   &.app-header--yellow {
     border-top: 10px solid govuk-colour("yellow");
   }
+}
+
+
+/* Approved UH site identity in the original GOV.UK generic-header structure. */
+.app-header {
+  background-color: govuk-colour("black");
+  border-bottom: 10px solid govuk-colour("blue");
+}
+
+.app-header .govuk-generic-header__container {
+  display: flex;
+  align-items: center;
+  gap: govuk-spacing(4);
+  flex-wrap: wrap;
+}
+
+.app-header__uh-homepage-link {
+  display: inline-flex;
+  align-items: center;
+  gap: govuk-spacing(2);
+  color: govuk-colour("white");
+  text-decoration: none;
+}
+
+.app-header__uh-crown {
+  display: block;
+  width: 32px;
+  height: 30px;
+  flex: none;
+}
+
+.app-header__uh-wordmark {
+  font-weight: 700;
+  font-size: 1.875rem;
+  line-height: 1;
+}
+
+.app-header__product-name {
+  color: govuk-colour("white");
+  font-size: 1.1875rem;
 }

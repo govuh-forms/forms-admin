@@ -1,0 +1,8 @@
+{
+  "source": "United Hampshire user-supplied coat of arms; approved extracted crown",
+  "controlling_manifest": "GOV.UH Site Identity release.json, header_crown_approved_png_sha256",
+  "approved_source_sha256": "293218916b282a75c89326fab581942fe1f46652a32d122c17d47c9545398675",
+  "website_static_path": "/assets/forms-admin/uh-approved-crown.png",
+  "intended_use": "Forms Admin staff header, favicon and footer",
+  "uk_government_artwork_permitted": false
+}
