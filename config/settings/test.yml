@@ -28,3 +28,7 @@ cloudwatch_metrics_enabled: false
 
 reports:
   forms_api_forms_per_request_page: 3
+
+# Upstream agreement view/validation examples exercise the existing contract fixtures.
+uh_agreements:
+  approved: true

@@ -1,4 +1,5 @@
 class MouSignaturesController < WebController
+  before_action :require_approved_uh_agreement
   before_action :set_agreement_type
 
   def show
@@ -35,6 +36,12 @@ class MouSignaturesController < WebController
   end
 
 private
+
+  def require_approved_uh_agreement
+    return if Settings.uh_agreements.approved
+
+    render "errors/agreement_unavailable", status: :service_unavailable
+  end
 
   def mou_signature_params
     params.require(:mou_signature).permit(:agreed)

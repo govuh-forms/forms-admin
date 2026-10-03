@@ -5,6 +5,28 @@ RSpec.describe MouSignaturesController, type: :request do
     login_as_standard_user
   end
 
+  context "when the UH agreement is not approved" do
+    before { allow(Settings.uh_agreements).to receive(:approved).and_return(false) }
+
+    it "does not render the unapproved upstream UK agreement" do
+      get new_mou_signature_url
+      expect(response).to have_http_status(:service_unavailable)
+      expect(response.body).not_to include("GOV.UK Forms")
+    end
+
+    it "does not accept an organisation signature" do
+      expect do
+        post mou_signature_url, params: { mou_signature: { agreed: "1" } }
+      end.not_to change(MouSignature, :count)
+      expect(response).to have_http_status(:service_unavailable)
+    end
+
+    it "also blocks the non-crown agreement" do
+      get new_non_crown_agreement_signature_url
+      expect(response).to have_http_status(:service_unavailable)
+    end
+  end
+
   context "when the URL is for the crown MOU" do
     context "when the user has not signed the memorandum of understanding" do
       describe "#show" do
