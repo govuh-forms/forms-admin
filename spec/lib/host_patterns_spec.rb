@@ -1,73 +1,35 @@
 require_relative "../../lib/host_patterns"
 require "rails_helper"
 
-RSpec.describe "Host Configuration" do
-  let(:host_patterns) { HostPatterns.allowed_host_patterns }
-
-  # Used only for testing the regex
+RSpec.describe HostPatterns do
   def host_allowed?(host)
-    host_patterns.any? { |pattern| host =~ /\A#{pattern}?\z/ }
+    described_class.allowed_host_patterns.any? { |pattern| pattern.match?(host) }
   end
 
-  context "with allowed hosts" do
-    it "matches the production admin domain" do
-      expect(host_allowed?("admin.forms.service.gov.uk")).to be true
-    end
-
-    it "matches environment-specific admin domains" do
-      %w[dev staging research].each do |env|
-        expect(host_allowed?("admin.#{env}.forms.service.gov.uk")).to be true
-      end
-    end
-
-    it "matches admin review app domains" do
-      expect(host_allowed?("pr-2032.admin.review.forms.service.gov.uk")).to be true
-    end
-
-    it "matches runner review app domains" do
-      expect(host_allowed?("pr-3023-admin.submit.review.forms.service.gov.uk")).to be true
-    end
+  it "allows only local probing while a public UH hostname is unapproved" do
+    allow(ENV).to receive(:fetch).with("APPROVED_UH_FORMS_ADMIN_HOST", "").and_return("")
+    expect(host_allowed?("127.0.0.1")).to be true
+    expect(host_allowed?("localhost")).to be true
+    expect(host_allowed?("admin.forms.service.gov.uk")).to be false
+    expect(host_allowed?("forms-admin.publishing.service.gov.uhrblx.com")).to be false
+    expect(described_class.mailer_host).to eq("forms-admin-unconfigured.invalid")
   end
 
-  context "with blocked hosts" do
-    it "doesn't match unrelated domains" do
-      ["example.com", "forms.gov.uk", "anything.forms.service.gov.uk", "admin.other-service.gov.uk"].each do |host|
-        expect(host_allowed?(host)).to be false
-      end
-    end
-
-    it "doesn't match incorrectly formatted review app domains" do
-      ["admin.pr-123.review.forms.service.gov.uk",
-       "pr123.admin.review.forms.service.gov.uk",
-       "admin-pr-123.submit.review.forms.service.gov.uk"].each do |host|
-        expect(host_allowed?(host)).to be false
-      end
-    end
-
-    it "doesn't match domains with extra subdomains" do
-      ["extra.admin.forms.service.gov.uk",
-       "admin.extra.dev.forms.service.gov.uk"].each do |host|
-        expect(host_allowed?(host)).to be false
-      end
+  it "only accepts the exact separately approved UH hostname" do
+    allow(ENV).to receive(:fetch).with("APPROVED_UH_FORMS_ADMIN_HOST", "").and_return("forms-admin.publishing.service.gov.uhrblx.com")
+    expect(host_allowed?("forms-admin.publishing.service.gov.uhrblx.com")).to be true
+    expect(described_class.mailer_host).to eq("forms-admin.publishing.service.gov.uhrblx.com")
+    %w[admin.forms.service.gov.uk forms-admin.publishing.service.gov.uhrblx.com.attacker.tld
+       evilforms-admin.publishing.service.gov.uhrblx.com forms-admin.publishing.service.gov.uhrblx.com.evil].each do |host|
+      expect(host_allowed?(host)).to be false
     end
   end
 
-  context "with ALLOWED_HOST_PATTERNS environment variable set" do
-    before do
-      allow(ENV).to receive(:fetch).with("ALLOWED_HOST_PATTERNS", "").and_return("localhost:3000, foo.[^.]*.example\.gov\.uk")
-    end
-
-    it "allows the host pattern specified in the environment variable" do
-      expect(host_allowed?("localhost:3000")).to be true
-      expect(host_allowed?("foo.bar.example.gov.uk")).to be true
-    end
-
-    it "allows the default host patterns" do
-      expect(host_allowed?("admin.forms.service.gov.uk")).to be true
-    end
-
-    it "doesn't match not allowed domains" do
-      expect(host_allowed?("example.gov.uk")).to be false
+  it "rejects an unapproved or invalid configured hostname" do
+    ["admin.forms.service.gov.uk", "https://forms-admin.gov.uhrblx.com", "forms-admin.gov.uhrblx.com:443", "evil.gov.uhrblx.com.evil"].each do |bad|
+      allow(ENV).to receive(:fetch).with("APPROVED_UH_FORMS_ADMIN_HOST", "").and_return(bad)
+      expect(described_class.approved_uh_host).to be_nil
+      expect(host_allowed?(bad)).to be false
     end
   end
 end
