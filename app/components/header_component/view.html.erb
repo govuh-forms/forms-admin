@@ -1,3 +1,9 @@
-<%= govuk_header classes: ["govuk-header--full-width-border", "app-header", app_header_class_for_environment] do |header| %>
-  <% header.with_product_name(name: "#{t("header.product_name")} #{render(environment_tag)}".html_safe, classes: ["app-header__product-name"]) %>
+<%= govuk_generic_header classes: ["govuk-header--full-width-border", "app-header", app_header_class_for_environment] do |header| %>
+  <% header.with_logo do %>
+    <%= link_to "https://www.gov.uhrblx.com/", class: "govuk-generic-header__homepage-link app-header__uh-homepage-link", aria: { label: "GOV.UH homepage" } do %>
+      <%= tag.img(src: "/assets/forms-admin/uh-approved-crown.png", alt: "", width: 32, height: 30, class: "app-header__uh-crown", aria: { hidden: true }) %>
+      <span class="app-header__uh-wordmark">GOV.UH</span>
+    <% end %>
+  <% end %>
+  <span class="app-header__product-name"><%= t("header.product_name") %> <%= render(environment_tag) %></span>
 <% end %>

@@ -9,6 +9,15 @@ features:
   save_and_return:
     enabled_by_group: true
 
+# The original UK agreement is reference material. New UH agreements can be
+# accepted only after the UH replacement is approved and issued.
+uh_agreements:
+  approved: false
+
+# Keep payments closed until the competent UH payment service is commissioned.
+uh_payments:
+  approved_origin:
+
 forms_api:
   # Authentication key to authenticate with forms-api
   auth_key: development_key

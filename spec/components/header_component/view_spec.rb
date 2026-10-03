@@ -18,6 +18,13 @@ RSpec.describe HeaderComponent::View, type: :component do
       expect(page).to have_text(I18n.t("header.product_name"))
     end
 
+    it "uses the approved UH crown rather than the upstream UK logotype" do
+      expect(page).to have_selector('img.app-header__uh-crown[src="/assets/forms-admin/uh-approved-crown.png"]')
+      expect(page).to have_text("GOV.UH")
+      expect(page).not_to have_selector("svg.govuk-header__logotype")
+      expect(page).to have_link("GOV.UH homepage", href: "https://www.gov.uhrblx.com/")
+    end
+
     it "has a full width border" do
       expect(page).to have_css(".govuk-header--full-width-border")
     end

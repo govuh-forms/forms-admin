@@ -1,15 +1,23 @@
 module HostPatterns
-  DEFAULT_HOST_PATTERNS = [
-    /admin\.forms\.service\.gov\.uk/,
-    /admin\.[^.]*\.forms\.service\.gov\.uk/,
-    /admin\.internal.[^.]*\.forms\.service\.gov\.uk/,
-    /pr-[^.]*\.admin\.review\.forms\.service\.gov\.uk/,
-    /pr-[^.]*-admin\.submit\.review\.forms\.service\.gov\.uk/,
-  ].freeze
+  LOCAL_HOST_PATTERNS = [/\Alocalhost\z/, /\A127\.0\.0\.1\z/].freeze
+
+  # The production Admin host must be an explicitly configured GOV.UH hostname.
+  # Never inherit UK upstream hosts or accept arbitrary regular expressions.
+  def self.approved_uh_host
+    hostname = ENV.fetch("APPROVED_UH_FORMS_ADMIN_HOST", "").strip.downcase
+    return nil if hostname.empty?
+
+    return nil unless hostname.match?(/\A[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)*\.gov\.uhrblx\.com\z/)
+
+    hostname
+  end
 
   def self.allowed_host_patterns
-    additional_patterns = ENV.fetch("ALLOWED_HOST_PATTERNS", "").split(",").map { |pattern| Regexp.new(pattern.strip) }
+    host = approved_uh_host
+    [*LOCAL_HOST_PATTERNS, *(host ? [/\A#{Regexp.escape(host)}\z/] : [])]
+  end
 
-    [*DEFAULT_HOST_PATTERNS, *additional_patterns]
+  def self.mailer_host
+    approved_uh_host || "forms-admin-unconfigured.invalid"
   end
 end
