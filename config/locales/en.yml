@@ -9,19 +9,19 @@ en:
         details_summary: If your organisation is not listed
         not_listed_html: |
           <p>If you’re from a central government organisation that’s not listed, %{contact_link}.</p>
-          <p>At the moment, GOV.UH Forms is only available to central government organisations. If you’re from an organisation outside central government, you can <a href="https://www.forms.service.gov.uk/forthcoming-features">read about future plans for GOV.UH Forms</a>.</p>
+          <p>At the moment, GOV.UH Forms is only available to central government organisations. If you’re from an organisation outside central government, you can <a href="https://www.forms.service.gov.uhrblx.com/about/forthcoming-features">read about future plans for GOV.UH Forms</a>.</p>
         not_listed_option: The organisation I work for is not listed
         you_created_account_with: You created your account using an @%{email_domain} email address.
       no_matches:
         body_html: |
           <p>If you’re from a central government organisation, %{contact_link}.</p>
-          <p>At the moment, GOV.UH Forms is only available to central government organisations. If you’re from an organisation outside central government, you can <a href="https://www.forms.service.gov.uk/forthcoming-features">read about future plans for GOV.UH Forms</a>.</p>
+          <p>At the moment, GOV.UH Forms is only available to central government organisations. If you’re from an organisation outside central government, you can <a href="https://www.forms.service.gov.uhrblx.com/about/forthcoming-features">read about future plans for GOV.UH Forms</a>.</p>
     terms_of_use:
       accessibility:
         heading: Make forms that are easy to use and accessible
         publishing:
           list_item_1: get help with designing, structuring and writing your form and its questions
-          list_item_2: prepare the starting point on GOV.UK to link to the form
+          list_item_2: prepare the starting point on GOV.UH to link to the form
           preamble: 'Speak with your organisation’s GOV.UH publishing or content team to:'
         section_1: The platform is designed to help you make forms that are easy to use and accessible, but this also depends on the design, structure and content of your questions.
         section_2: When you create a form, follow government standards and guidance to make sure the form is easy to use and accessible.
