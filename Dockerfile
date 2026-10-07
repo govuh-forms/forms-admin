@@ -11,6 +11,9 @@ FROM base AS build
 
 WORKDIR /app
 
+ENV GOVUK_APP_DOMAIN=publishing.service.gov.uhrblx.com \
+    GOVUK_APP_NAME=forms-admin
+
 RUN apk update
 RUN apk upgrade --available
 RUN apk add libc6-compat openssl-dev build-base libpq-dev nodejs=~${NODEJS_VERSION} npm git python3 yaml-dev
@@ -41,7 +44,7 @@ COPY --chown=ruby:ruby . .
 
 # you can't run rails commands like assets:precompile without a secret key set
 # even though the command doesn't use the value itself
-RUN SECRET_KEY_BASE=dummyvalue rails vite:build_all
+RUN SECRET_KEY_BASE=dummyvalue GDS_SSO_OAUTH_ID=build-time GDS_SSO_OAUTH_SECRET=build-time GDS_SSO_OAUTH_ROOT_URL=https://signon.publishing.service.gov.uhrblx.com rails vite:build_all
 
 # Remove devDependencies once assets have been built
 RUN npm ci --ignore-scripts --omit=dev

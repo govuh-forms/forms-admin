@@ -54,7 +54,7 @@ class WebController < ApplicationController
   end
 
   def user_signed_in
-    warden && warden.authenticated?
+    warden && warden.authenticated? && !warden.user.remotely_signed_out?
   end
 
   def current_user

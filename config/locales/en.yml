@@ -101,9 +101,9 @@ en:
             member_email_address:
               blank: Enter an email address
               invalid_email: Enter an email address in the correct format, like name@example.gov.uk
-              not_forms_user: This person does not have a GOV.UK Forms account
+              not_forms_user: This person does not have a GOV.UH Forms account
               taken: This person is already a member of the group
-              user_in_other_org: This person has a different organisation set for their GOV.UK Forms account
+              user_in_other_org: This person has a different organisation set for their GOV.UH Forms account
             role:
               blank: Select the role this person should have
         groups/delete_confirmation_input:
@@ -288,7 +288,7 @@ en:
           daily_enabled: You’ll get a daily batch of form submissions
           disabled: You will not get a daily or weekly batch of form submissions
           weekly_enabled: You’ll get a weekly batch of form submissions
-        brand_removed: Your form will use the default GOV.UK brand
+        brand_removed: Your form will use the default GOV.UH brand
         brand_saved: Your form’s brand has been saved
         change_name: Your form name has been saved
         copied: Your form has been copied
@@ -323,7 +323,7 @@ en:
     body_html: |
       <p>You can choose a brand to change how your form looks to people filling it in, for example, the logo and colours.</p>
 
-      <p>If you do not choose a brand, your form will use the default GOV.UK brand.</p>
+      <p>If you do not choose a brand, your form will use the default GOV.UH brand.</p>
     heading: Choose a brand for your form
   brands:
     edit:
@@ -334,7 +334,10 @@ en:
       no_results: No brands found.
       table_caption: Brands
       table_headings:
+        draft_forms: Draft forms
+        live_forms: Live forms
         name: Brand name
+        organisations: Organisations
         slug: Slug
     show:
       edit_brand: Edit this brand
@@ -388,7 +391,7 @@ en:
       email_confirmation_hint_html: The optional email confirmation will also include the ‘what happens next’ information you provide. It will not contain a copy of their answers.
       hint: Select at least one option
       title: How can people get help with filling in this form?
-  contact_govuk_forms: contact the GOV.UK Forms team
+  contact_govuk_forms: contact the GOV.UH Forms team
   contact_url: https://www.forms.service.gov.uk/support
   continue: Continue
   date:
@@ -490,7 +493,7 @@ en:
       You do not have permission to view this page.
 
       %{link} if you think this is incorrect.
-    body_html_org_restricted: Your GOV.UK publishing team is managing the creation of forms for your department. Please contact them to discuss your form needs.
+    body_html_org_restricted: Your GOV.UH publishing team is managing the creation of forms for your department. Please contact them to discuss your form needs.
     link_text: Contact the GOV⁠.⁠UK Forms team
     title: You cannot view this page
   form_statuses:
@@ -797,7 +800,7 @@ en:
         <p>You can add someone to create and edit forms in this group. They must:</p>
         <ul class="govuk-list govuk-list--bullet">
           <li>be from the same organisation as you</li>
-          <li>already have a GOV.UK Forms account</li>
+          <li>already have a GOV.UH Forms account</li>
         </ul>
 
         <p>You must use their government email address.</p>
@@ -811,14 +814,14 @@ en:
         body_html: |
           <p>Each form needs to be created in a ‘group’. Once you have a group, you can add other people to create and edit forms in it.</p>
           <p>When you first create a group, it will be a ‘trial’ group. That means you can test how the platform works, but you cannot make any forms in the group live.</p>
-          <p>You’ll only be able to make forms live if you get permission from your organisation’s GOV.UK Forms admin.</p>
-          <p>If you want to use this group to create live forms, or if you are not sure you should make a new group, contact your organisation’s GOV.UK Forms admin before you continue. They’ll be able to advise about how they’re managing the use of the platform and the creation of forms in your organisation.</p>
-        org_admin_list_title: 'Your organisation’s GOV.UK forms admins are:'
+          <p>You’ll only be able to make forms live if you get permission from your organisation’s GOV.UH Forms admin.</p>
+          <p>If you want to use this group to create live forms, or if you are not sure you should make a new group, contact your organisation’s GOV.UH Forms admin before you continue. They’ll be able to advise about how they’re managing the use of the platform and the creation of forms in your organisation.</p>
+        org_admin_list_title: 'Your organisation’s GOV.UH forms admins are:'
       without_org_admin:
         body_html: |
           <p>Each form needs to be created in a ‘group’. Once you have a group, you can add other people to create and edit forms in it.</p>
           <p>When you first create a group, it will be a ‘trial’ group. That means you can test how the platform works, but you cannot make any forms in the group live.</p>
-          <p>If you’re not sure if you should make a new group, or you want to use this group for live forms, contact your organisation’s GOV.UK publishing team.</p>
+          <p>If you’re not sure if you should make a new group, or you want to use this group for live forms, contact your organisation’s GOV.UH publishing team.</p>
     confirm_upgrade:
       body_html: |
         <p>If you upgrade this group:</p>
@@ -830,8 +833,8 @@ en:
     confirm_upgrade_request:
       body_html: |
         <p> If you need to be able to make forms live, you can send a request for this group to be upgraded to an ‘active’ group. </p>
-        <p> Your request will be sent to your organisation’s GOV.UK Forms admins. They can advise you about how they’re managing use of the platform and the creation of forms in your organisation. </p>
-        <p> Your organisation’s GOV.UK Forms admins are: </p>
+        <p> Your request will be sent to your organisation’s GOV.UH Forms admins. They can advise you about how they’re managing use of the platform and the creation of forms in your organisation. </p>
+        <p> Your organisation’s GOV.UH Forms admins are: </p>
         %{organisation_admin_emails}
       inset_text: Send your request before you spend too much time creating real forms, as your organisation may be restricting who can make forms live.
       send_request_to_upgrade: Send request to upgrade
@@ -851,7 +854,7 @@ en:
     form_table_caption: Forms in ‘%{group_name}’
     group_list:
       created_by: Created by
-      created_by_unknown: GOV.UK Forms team
+      created_by_unknown: GOV.UH Forms team
       name: Group name
     index:
       active_empty_message: You’re not in any active groups.
@@ -861,14 +864,14 @@ en:
         <p> Each form is created inside a group. People can be added to a group to create and edit forms in it. </p>
         <p> If you need access to an existing form or group, ask someone who has access to the group to add you. </p>
         <p> When a group is first created it will be a ‘trial’ group. That means you cannot make any forms in the group live. You can request for a group to be upgraded to an ‘active’ group if you need to make forms live. </p>
-        <p> If you’re not sure if you should make a new group, speak with your organisation’s GOV.UK Forms admin. Contact them at: </p>
+        <p> If you’re not sure if you should make a new group, speak with your organisation’s GOV.UH Forms admin. Contact them at: </p>
       group_explainer_body_org_without_admin_html: |
         <p> Each form is created inside a group. People can be added to a group to create and edit forms in it. </p>
         <p> If you need access to an existing form or group, ask someone who has access to the group to add you. </p>
         <p> When a group is first created it will be a ‘trial’ group. That means you cannot make any forms in the group live. You can request for a group to be upgraded to an ‘active’ group if you need to make forms live. </p>
-        <p> If you’re not sure if you should make a new group, speak with your organisation’s GOV.UK publishing team. </p>
+        <p> If you’re not sure if you should make a new group, speak with your organisation’s GOV.UH publishing team. </p>
       group_explainer_org_admin_body_html: |
-        <p> Each form is created inside a group. Anyone with a GOV.UK Forms account can make a group. They can add people from their organisation to that group to view, create and edit forms in it. </p>
+        <p> Each form is created inside a group. Anyone with a GOV.UH Forms account can make a group. They can add people from their organisation to that group to view, create and edit forms in it. </p>
         <p> When a group is first created it will be a ‘trial’ group. That means forms in the group cannot be made live. </p>
         <p>Only an organisation admin can:</p>
         <ul class="govuk-list govuk-list--bullet">
@@ -908,7 +911,7 @@ en:
         it. For example:</p>
         <ul class="govuk-list govuk-list--bullet">
           <li>Licensing forms</li>
-          <li>GOV.UK content team</li>
+          <li>GOV.UH content team</li>
           <li>Juggling service forms</li>
           <li>Test forms</li>
         </ul>
@@ -942,7 +945,7 @@ en:
             <p>People in your organisation can also ask you to do these things for them.</p>
         standard_user:
           active_group_summary_html: |
-            <p>You can ask your organisation’s GOV.UK Forms admin to:</p>
+            <p>You can ask your organisation’s GOV.UH Forms admin to:</p>
             <ul class="govuk-list govuk-list--bullet">
               <li>add and remove group admins </li>
               <li>move a form to a different group</li>
@@ -950,7 +953,7 @@ en:
             </ul>
             <p>Contact them at:</p>
           trial_group_summary_html: |
-            <p>You can ask your organisation’s GOV.UK Forms admin to:</p>
+            <p>You can ask your organisation’s GOV.UH Forms admin to:</p>
             <ul class="govuk-list govuk-list--bullet">
               <li>upgrade a trial group to an ‘active’ group so forms in the group can be made live </li>
               <li>add and remove group admins </li>
@@ -972,7 +975,7 @@ en:
         heading: This is a ‘trial’ group
         request_upgrade:
           body_html: "<p>You can create forms in this group and test them, but you cannot make them live.</p>"
-          contact_html: "<p>Speak to your organisation’s GOV.UK publishing team or %{contact_link} to find out how to make live forms.</p>"
+          contact_html: "<p>Speak to your organisation’s GOV.UH publishing team or %{contact_link} to find out how to make live forms.</p>"
           link: Find out how to make forms live
           organisation_requirements_html: |
             <p>Before anyone from your organisation can make forms live, someone from your organisation needs to:</p>
@@ -999,7 +1002,7 @@ en:
     upgrade_requested:
       what_happens_next:
         body_html: |
-          <p>Your request has been sent to your organisation’s GOV.UK Forms admins. They will contact you to discuss your request.</p>
+          <p>Your request has been sent to your organisation’s GOV.UH Forms admins. They will contact you to discuss your request.</p>
           <p>We’ll also send you an email when your request is accepted or rejected.</p>
         heading: What happens next
   guidance:
@@ -1351,7 +1354,7 @@ en:
       body_html: |
         <p>
           The form will not be indexed by search engines, so people will not be able to find it easily.
-          Contact your GOV.UK publishing team to publish a link to your form on GOV.UK so people can find it.
+          Contact your GOV.UH publishing team to publish a link to your form on GOV.UH so people can find it.
         </p>
 
         <p>
@@ -1368,8 +1371,8 @@ en:
         </p>
       body_html_cy: |
         <p>
-          Links to your form need to be published on GOV.UK so people can find it.
-          Contact your organisation’s GOV.UK publishing team to do this.
+          Links to your form need to be published on GOV.UH so people can find it.
+          Contact your organisation’s GOV.UH publishing team to do this.
         </p>
     url_will_remain_same: Links to the form will still work, even if you’ve changed the form’s name.
     warning: |
@@ -1382,17 +1385,17 @@ en:
       new:
         body_html: |
           <p>When you make your form live you’ll get a new URL for the Welsh version.</p>
-          <p>The form will not be indexed by search engines, so people will not be able to find it easily. Contact your GOV.UK publishing team to publish links to your form on GOV.UK so people can find it.</p>
+          <p>The form will not be indexed by search engines, so people will not be able to find it easily. Contact your GOV.UH publishing team to publish links to your form on GOV.UH so people can find it.</p>
           <p>Completed forms will be sent to: <span class="govuk-!-text-break-word">%{submission_email}</span></p>
     en:
       make_your_changes_to_english_live:
         body_html: |
-          <p>The form will not be indexed by search engines, so people will not be able to find it easily. Contact your GOV.UK publishing team to publish links to your form on GOV.UK so people can find it.</p>
+          <p>The form will not be indexed by search engines, so people will not be able to find it easily. Contact your GOV.UH publishing team to publish links to your form on GOV.UH so people can find it.</p>
           <p>Completed forms will be sent to: <span class="govuk-!-text-break-word">%{submission_email}</span></p>
       new:
         body_html: |
           <p>When you make your form live you’ll get a new URL for the English version.</p>
-          <p>The form will not be indexed by search engines, so people will not be able to find it easily. Contact your GOV.UK publishing team to publish links to your form on GOV.UK so people can find it.</p>
+          <p>The form will not be indexed by search engines, so people will not be able to find it easily. Contact your GOV.UH publishing team to publish links to your form on GOV.UH so people can find it.</p>
           <p>Completed forms will be sent to: <span class="govuk-!-text-break-word">%{submission_email}</span></p>
   make_live:
     confirmation:
@@ -1400,7 +1403,7 @@ en:
       body_html: |
         <p>
           The form will not be indexed by search engines, so people will not be able to find it easily.
-          Contact your GOV.UK publishing team to publish a link to your form on GOV.UK so people can find it.
+          Contact your GOV.UH publishing team to publish a link to your form on GOV.UH so people can find it.
         </p>
       body_html_cy: |
         <p>
@@ -1408,7 +1411,7 @@ en:
         </p>
       body_individual_language_html: |
         <p>
-          The form will not be indexed by search engines, so people will not be able to find it easily. Contact your GOV.UK publishing team to publish links to your form on GOV.UK so people can find it.
+          The form will not be indexed by search engines, so people will not be able to find it easily. Contact your GOV.UH publishing team to publish links to your form on GOV.UH so people can find it.
         </p>
       continue_link: Continue to the live form’s details
       copy_english_url_to_clipboard: Copy English URL to clipboard
@@ -1425,8 +1428,8 @@ en:
         <p>
           When you make your form live you’ll get a URL for the form. The form
           will not be indexed by search engines, so people will not be able to
-          find it easily. Contact your GOV.UK publishing team to publish a link to
-          your form on GOV.UK so people can find it.
+          find it easily. Contact your GOV.UH publishing team to publish a link to
+          your form on GOV.UH so people can find it.
         </p>
 
         <p>
@@ -1464,7 +1467,7 @@ en:
 
           Do not use headings to style your text in bold. This can cause issues for people using assistive technology.
       links:
-        example: "[Link text](https://www.gov.uk/link-text-url)"
+        example: "[Link text](https://www.gov.uhrblx.com/link-text-url)"
         heading: Links and URLs
         instructions: 'To add a link, use square brackets [ ] around the link text, and round brackets ( ) around the full URL. Make sure there are no spaces between the two sets of brackets. For example:'
       new_lines_and_paragraphs:
@@ -1589,7 +1592,7 @@ en:
       title: Add a brand
     update_default:
       success: "%{brand_name} is now the default brand for new forms in this organisation"
-      success_govuk: New forms in this organisation will use GOV.UK branding
+      success_govuk: New forms in this organisation will use GOV.UH branding
   organisation_domains:
     delete:
       title: Are you sure you want to remove %{domain} from this organisation?
@@ -1642,7 +1645,7 @@ en:
       brands:
         add: Add a brand
         default_tag: Default
-        govuk_brand_name: GOV.UK
+        govuk_brand_name: GOV.UH
         guidance: Add brands to make them available for forms in this organisation to use. New forms will use the default brand, and people editing a form can change its brand. Forms that already use a brand will continue to use it, even if you remove the brand from this organisation.
         heading: Available brands
         make_default: Make default
@@ -1673,7 +1676,7 @@ en:
         closed: Closed
         created_at: Created
         draft_forms: Number of draft forms
-        govuk_content_id: GOV.UK content ID
+        govuk_content_id: GOV.UH content ID
         groups: Number of groups
         internal: Internal
         live_forms: Number of live forms
@@ -1766,8 +1769,8 @@ en:
     text:
       length: Length
   page_titles:
-    access_denied: You do not have permission to access GOV.UK Forms
-    account_contact_for_research: Can we send you an email with information about taking part in user research to improve GOV.UK Forms?
+    access_denied: You do not have permission to access GOV.UH Forms
+    account_contact_for_research: Can we send you an email with information about taking part in user research to improve GOV.UH Forms?
     account_name: Enter your name
     account_organisation: Select your organisation
     account_terms_of_use: Terms of use
@@ -2026,7 +2029,7 @@ en:
       heading: How this will work for people filling in your form
     set_up_your_payment_link:
       body_html: |
-        <p>GOV.UK Forms adds a unique 8-character reference to each form submission.</p>
+        <p>GOV.UH Forms adds a unique 8-character reference to each form submission.</p>
 
         <p>When creating a payment link in GOV.UK Pay, you’ll be asked ‘Do your users already have a payment reference?’</p>
 
@@ -2367,10 +2370,10 @@ en:
   share_preview:
     body_html: |
       <p>You can share a link to a preview of your draft form so people can try it out and review the content.</p>
-      <p>You may need to share it with your organisation’s GOV.UK publishing team so they can:</p>
+      <p>You may need to share it with your organisation’s GOV.UH publishing team so they can:</p>
       <ul class="govuk-list govuk-list--bullet">
         <li>review the content</li>
-        <li>make any necessary changes to related content on GOV.UK</li>
+        <li>make any necessary changes to related content on GOV.UH</li>
       </ul>
       <p>Anyone with the preview link can view the form - no password is needed.</p>
     preview_link_button: Copy link to clipboard
@@ -2428,8 +2431,8 @@ en:
         <p>
           The form will not be indexed by search engines,
           so people will not be able to find it easily.
-          Contact your GOV.UK publishing team to publish a link to
-          your form on GOV.UK so people can find it.
+          Contact your GOV.UH publishing team to publish a link to
+          your form on GOV.UH so people can find it.
         </p>
 
         <p>
@@ -2439,10 +2442,10 @@ en:
     act_as_user_html: Act as this user <span class="govuk-visually-hidden">%{user_email}</span>
     cancel: Cancel
     edit:
-      access: Permission to access GOV.UK Forms
+      access: Permission to access GOV.UH Forms
       caption: User details
       first_signed_in: First signed in
-      has_access: Access to GOV.UK Forms
+      has_access: Access to GOV.UH Forms
       last_signed_in: Last signed in
       mou_banner: You cannot upgrade this user’s role until someone from their organisation agrees to the MOU
       organisation: Organisation
@@ -2453,10 +2456,10 @@ en:
     has_access:
       any: Any access
       'false':
-        description: Cannot use GOV.UK Forms
+        description: Cannot use GOV.UH Forms
         name: Denied
       'true':
-        description: Can use GOV.UK Forms
+        description: Can use GOV.UH Forms
         name: Permitted
     index:
       download_all: Download data about all users as a CSV file
@@ -2502,7 +2505,7 @@ en:
         description: Can be an editor or a group admin in groups in their organisation
         name: Standard user
       super_admin:
-        description: Can manage groups and users in all organisations - GOV.UK Forms team members only
+        description: Can manage groups and users in all organisations - GOV.UH Forms team members only
         name: Super admin
     save: Save
   what_happens_next:
@@ -2519,4 +2522,4 @@ en:
         <li>included in an email confirmation, if they choose to receive this</li>
       </ul>
     instructions: Add some information to tell people what will happen after they’ve submitted their form, and when - so they know what to expect.
-    reference_numbers: GOV.UK Forms adds a unique reference number to the confirmation page and optional email confirmation. This will also be included in submission emails sent to your processing email address.
+    reference_numbers: GOV.UH Forms adds a unique reference number to the confirmation page and optional email confirmation. This will also be included in submission emails sent to your processing email address.

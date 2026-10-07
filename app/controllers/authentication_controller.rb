@@ -45,14 +45,18 @@ class AuthenticationController < WebController
     end
   end
 
-  def failure
-    render "authentications/failure"
-  end
-
 private
 
   def attempted_path
     request.env["warden.options"][:attempted_path]
+  end
+
+  def default_provider
+    if Settings.auth_provider == "gds_sso"
+      "gds"
+    else
+      Settings.auth_provider
+    end
   end
 
   def auth0_sign_out_url

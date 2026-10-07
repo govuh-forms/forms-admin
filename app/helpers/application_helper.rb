@@ -88,7 +88,8 @@ module ApplicationHelper
   end
 
   def omniauth_authorize_path
-    "/auth/#{Settings.auth_provider.dasherize}"
+    provider = Settings.auth_provider == "gds_sso" ? "gds" : Settings.auth_provider.dasherize
+    "/auth/#{provider}"
   end
 
   def sign_in_params(is_e2e_user:, login_type: :sign_in)
