@@ -249,12 +249,14 @@ Rails.application.routes.draw do
 
   resources :brands, only: %i[index show new create edit update]
 
-  resource :mou_signature, only: %i[new show create], path: "/memorandum-of-understanding", defaults: { agreement_type: :crown }, as: :mou_signature do
-    get "/signed", to: "mou_signatures#confirmation", as: :confirmation
-  end
+  if Settings.features.organisation_agreement.enabled
+    resource :mou_signature, only: %i[new show create], path: "/memorandum-of-understanding", defaults: { agreement_type: :crown }, as: :mou_signature do
+      get "/signed", to: "mou_signatures#confirmation", as: :confirmation
+    end
 
-  resource :mou_signature, only: %i[new show create], path: "/govuk-forms-agreement", defaults: { agreement_type: :non_crown }, as: :non_crown_agreement_signature do
-    get "/signed", to: "mou_signatures#confirmation", as: :confirmation
+    resource :mou_signature, only: %i[new show create], path: "/govuk-forms-agreement", defaults: { agreement_type: :non_crown }, as: :non_crown_agreement_signature do
+      get "/signed", to: "mou_signatures#confirmation", as: :confirmation
+    end
   end
 
   resources :groups do
