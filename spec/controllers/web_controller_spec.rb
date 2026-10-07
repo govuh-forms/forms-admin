@@ -38,7 +38,7 @@ describe WebController, type: :controller do
     %w[
       auth0
       basic_auth
-      developer
+      gds_sso
     ].each do |provider|
       context "when #{provider} auth is enabled" do
         before do

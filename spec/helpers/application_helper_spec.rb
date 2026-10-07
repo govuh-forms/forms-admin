@@ -326,6 +326,14 @@ RSpec.describe ApplicationHelper, type: :helper do
       it { is_expected.to eq "/auth/auth0" }
     end
 
+    context "when the auth provider is gds_sso" do
+      before do
+        allow(Settings).to receive(:auth_provider).and_return("gds_sso")
+      end
+
+      it { is_expected.to eq "/auth/gds" }
+    end
+
     context "when the auth provider is developer" do
       before do
         allow(Settings).to receive(:auth_provider).and_return("developer")
