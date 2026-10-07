@@ -2,6 +2,8 @@
 features:
   payment_links:
     enabled: false
+  organisation_agreement:
+    enabled: false
   custom_branding:
     enabled_by_group: true
   exit_pages:
