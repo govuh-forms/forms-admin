@@ -216,7 +216,7 @@ class Form < ApplicationRecord
   end
 
   def has_welsh_translation?
-    available_languages.include?("cy")
+    Settings.features.welsh_translation.enabled && available_languages.include?("cy")
   end
 
   def normalise_welsh!
@@ -279,11 +279,11 @@ class Form < ApplicationRecord
   end
 
   def has_live_welsh_translation?
-    latest_welsh_form_document&.tag == "live"
+    Settings.features.welsh_translation.enabled && latest_welsh_form_document&.tag == "live"
   end
 
   def has_archived_welsh_translation?
-    latest_welsh_form_document&.tag == "archived"
+    Settings.features.welsh_translation.enabled && latest_welsh_form_document&.tag == "archived"
   end
 
 private

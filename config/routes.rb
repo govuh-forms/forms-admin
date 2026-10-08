@@ -5,15 +5,15 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "/up" => "rails/health#show", as: :rails_health_check
 
-  get "/security.txt" => redirect("https://vulnerability-reporting.service.security.gov.uk/.well-known/security.txt")
-  get "/.well-known/security.txt" => redirect("https://vulnerability-reporting.service.security.gov.uk/.well-known/security.txt")
+  get "/security.txt" => "errors#not_found"
+  get "/.well-known/security.txt" => "errors#not_found"
 
   root "groups#index"
 
   get "/sign-up" => "authentication#sign_up", as: :sign_up
   get "/sign-out" => "authentication#sign_out", as: :sign_out
   get "/sign-in" => "authentication#sign_in", as: :sign_in
-  get "/auth/failure" => "authentication#failure", as: :auth_failure
+  get "/auth/failure" => "authentication#failure", as: :auth_failure unless Settings.auth_provider == "gds_sso"
 
   scope "auth/:provider" do
     match "/callback" => "authentication#callback_from_omniauth", via: %i[get post]
@@ -49,16 +49,20 @@ Rails.application.routes.draw do
     get "/archive" => "forms/archive_form#archive", as: :archive_form
     post "/archive" => "forms/archive_form#update", as: :archive_form_update
     get "/archive-success" => "forms/archive_form#confirmation", as: :archive_form_confirmation
-    get "/archive-welsh" => "forms/archive_welsh#show", as: :archive_welsh
-    post "/archive-welsh" => "forms/archive_welsh#update", as: :archive_welsh_update
+    if Settings.features.welsh_translation.enabled
+      get "/archive-welsh" => "forms/archive_welsh#show", as: :archive_welsh
+      post "/archive-welsh" => "forms/archive_welsh#update", as: :archive_welsh_update
+    end
     get "/privacy-policy" => "forms/privacy_policy#new", as: :privacy_policy
     post "/privacy-policy" => "forms/privacy_policy#create"
     get "/make-live" => "forms/make_live#new", as: :make_live
     post "/make-live" => "forms/make_live#create", as: :make_live_create
-    get "/make-live/:language" => "forms/make_language_live#new", as: :make_language_live
-    post "/make-live/:language" => "forms/make_language_live#create", as: :make_language_live_create
-    get "/make-live/:language/success" => "forms/make_language_live#show_confirmation", as: :make_language_live_show_confirmation
-    post "/make-live/:language/success" => "forms/make_language_live#submit_confirmation", as: :make_language_live_submit_confirmation
+    if Settings.features.welsh_translation.enabled
+      get "/make-live/:language" => "forms/make_language_live#new", as: :make_language_live
+      post "/make-live/:language" => "forms/make_language_live#create", as: :make_language_live_create
+      get "/make-live/:language/success" => "forms/make_language_live#show_confirmation", as: :make_language_live_show_confirmation
+      post "/make-live/:language/success" => "forms/make_language_live#submit_confirmation", as: :make_language_live_submit_confirmation
+    end
     get "/unarchive" => "forms/unarchive#new", as: :unarchive
     post "/unarchive" => "forms/unarchive#create", as: :unarchive_create
     get "/what-happens-next" => "forms/what_happens_next#new", as: :what_happens_next
@@ -75,14 +79,16 @@ Rails.application.routes.draw do
     post "/brand" => "forms/brand#create", as: :form_brand_create
     get "/share-preview" => "forms/share_preview#new", as: :share_preview
     post "/share-preview" => "forms/share_preview#create", as: :share_preview_create
-    get "/welsh-translation" => "forms/welsh_translation#new", as: :welsh_translation
-    post "/welsh-translation" => "forms/welsh_translation#create", as: :welsh_translation_create
-    get "/welsh-translation/delete" => "forms/welsh_translation#delete", as: :welsh_translation_delete
-    delete "/welsh-translation/delete" => "forms/welsh_translation#destroy", as: :welsh_translation_destroy
-    post "/welsh-translation-preview" => "forms/welsh_translation#render_preview", as: :welsh_translation_render_preview
-    get "/welsh-translation-download" => "forms/welsh_translation#download", as: :welsh_translation_download
-    get "/welsh-translation-upload" => "forms/welsh_translation#show_upload", as: :welsh_translation_show_upload
-    post "/welsh-translation-upload" => "forms/welsh_translation#upload", as: :welsh_translation_upload
+    if Settings.features.welsh_translation.enabled
+      get "/welsh-translation" => "forms/welsh_translation#new", as: :welsh_translation
+      post "/welsh-translation" => "forms/welsh_translation#create", as: :welsh_translation_create
+      get "/welsh-translation/delete" => "forms/welsh_translation#delete", as: :welsh_translation_delete
+      delete "/welsh-translation/delete" => "forms/welsh_translation#destroy", as: :welsh_translation_destroy
+      post "/welsh-translation-preview" => "forms/welsh_translation#render_preview", as: :welsh_translation_render_preview
+      get "/welsh-translation-download" => "forms/welsh_translation#download", as: :welsh_translation_download
+      get "/welsh-translation-upload" => "forms/welsh_translation#show_upload", as: :welsh_translation_show_upload
+      post "/welsh-translation-upload" => "forms/welsh_translation#upload", as: :welsh_translation_upload
+    end
     get "/submission-attachments" => "forms/submission_attachments#new", as: :submission_attachments
     post "/submission-attachments" => "forms/submission_attachments#create", as: :submission_attachments_create
     get "/batch-submissions" => "forms/batch_submissions#new", as: :batch_submissions
@@ -249,12 +255,14 @@ Rails.application.routes.draw do
 
   resources :brands, only: %i[index show new create edit update]
 
-  resource :mou_signature, only: %i[new show create], path: "/memorandum-of-understanding", defaults: { agreement_type: :crown }, as: :mou_signature do
-    get "/signed", to: "mou_signatures#confirmation", as: :confirmation
-  end
+  if Settings.features.organisation_agreement.enabled
+    resource :mou_signature, only: %i[new show create], path: "/memorandum-of-understanding", defaults: { agreement_type: :crown }, as: :mou_signature do
+      get "/signed", to: "mou_signatures#confirmation", as: :confirmation
+    end
 
-  resource :mou_signature, only: %i[new show create], path: "/govuk-forms-agreement", defaults: { agreement_type: :non_crown }, as: :non_crown_agreement_signature do
-    get "/signed", to: "mou_signatures#confirmation", as: :confirmation
+    resource :mou_signature, only: %i[new show create], path: "/govuk-forms-agreement", defaults: { agreement_type: :non_crown }, as: :non_crown_agreement_signature do
+      get "/signed", to: "mou_signatures#confirmation", as: :confirmation
+    end
   end
 
   resources :groups do
@@ -302,7 +310,9 @@ Rails.application.routes.draw do
       get "forms-with-weekly-submission-csv", to: "reports#forms_with_weekly_submission_csv", as: :report_forms_with_weekly_submission_csv
       get "forms-with-s3-submissions", to: "reports#forms_with_s3_submissions", as: :report_forms_with_s3_submissions
       get "forms-with-exit-pages", to: "reports#forms_with_exit_pages", as: :report_forms_with_exit_pages
-      get "forms-with-welsh-translation", to: "reports#forms_with_welsh_translation", as: :report_forms_with_welsh_translation
+      if Settings.features.welsh_translation.enabled
+        get "forms-with-welsh-translation", to: "reports#forms_with_welsh_translation", as: :report_forms_with_welsh_translation
+      end
       get "forms-with-copy-of-answers-enabled", to: "reports#forms_with_copy_of_answers_enabled", as: :report_forms_with_copy_of_answers_enabled
       get "selection-questions-summary", to: "reports#selection_questions_summary", as: :report_selection_questions_summary
       get "selection-questions-with-autocomplete", to: "reports#selection_questions_with_autocomplete", as: :report_selection_questions_with_autocomplete
@@ -354,9 +364,9 @@ Rails.application.routes.draw do
 
   get "/sitemap" => "sitemap#index", as: :sitemap
 
-  direct(:accessibility_statement) { "https://www.forms.service.gov.uk/accessibility" }
-  direct(:cookies) { "https://www.forms.service.gov.uk/cookies" }
-  direct(:privacy) { "https://www.forms.service.gov.uk/privacy" }
-  direct(:terms_of_use) { "https://www.forms.service.gov.uk/terms-of-use" }
+  direct(:accessibility_statement) { "https://forms.service.gov.uhrblx.com/accessibility" }
+  direct(:cookies) { "https://forms.service.gov.uhrblx.com/cookies" }
+  direct(:privacy) { "https://forms.service.gov.uhrblx.com/privacy" }
+  direct(:terms_of_use) { "https://forms.service.gov.uhrblx.com/terms-of-use" }
   direct(:support) { Settings.forms_product_page.support_url }
 end

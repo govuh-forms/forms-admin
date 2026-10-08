@@ -1,5 +1,7 @@
 module Forms
   class PaymentLinkController < FormsController
+    before_action :require_payment_links_feature
+
     def new
       authorize current_form, :can_view_form?
       @payment_link_input = PaymentLinkInput.new(form: current_form).assign_form_values
@@ -19,6 +21,10 @@ module Forms
     end
 
   private
+
+    def require_payment_links_feature
+      raise NotFoundError unless FeatureService.enabled?(:payment_links)
+    end
 
     def payment_link_input_params
       params.require(:forms_payment_link_input).permit(:payment_url).merge(form: current_form)

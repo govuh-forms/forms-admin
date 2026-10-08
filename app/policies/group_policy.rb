@@ -30,7 +30,7 @@ class GroupPolicy < ApplicationPolicy
   alias_method :destroy?, :delete?
 
   def upgrade?
-    organisation_admin_or_super_admin? && record.organisation.mou_signatures.present?
+    organisation_admin_or_super_admin? && (!Settings.features.organisation_agreement.enabled || record.organisation.mou_signatures.present?)
   end
 
   def add_group_admin?

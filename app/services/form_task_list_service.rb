@@ -62,9 +62,10 @@ private
   end
 
   def create_form_optional_subsection
-    rows = [
-      { task_name: I18n.t("forms.task_list_#{create_or_edit}.create_form_optional_subsection.payment_link"), path: payment_link_path(@form.id), status: @task_statuses[:payment_link_status] },
-    ]
+    rows = []
+    if FeatureService.enabled?(:payment_links)
+      rows << { task_name: I18n.t("forms.task_list_#{create_or_edit}.create_form_optional_subsection.payment_link"), path: payment_link_path(@form.id), status: @task_statuses[:payment_link_status] }
+    end
     if FeatureService.new(group: @form.group).enabled?(:custom_branding)
       rows << { task_name: I18n.t("forms.task_list_#{create_or_edit}.create_form_optional_subsection.brand"), path: form_brand_path(@form.id), status: @task_statuses[:brand_status] }
     end

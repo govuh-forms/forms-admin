@@ -72,7 +72,7 @@ class User < ApplicationRecord
   validates :role, presence: true
   validates :organisation_id, presence: true, if: :requires_organisation?
   validates :has_access, inclusion: [true, false]
-  validates :role, exclusion: %w[organisation_admin], unless: :current_org_has_mou?
+  validates :role, exclusion: %w[organisation_admin], unless: :organisation_admin_assignment_allowed?
   validates :email, uniqueness: { case_sensitive: false }
 
   before_create do
@@ -152,6 +152,10 @@ class User < ApplicationRecord
   end
 
 private
+
+  def organisation_admin_assignment_allowed?
+    !Settings.features.organisation_agreement.enabled || current_org_has_mou?
+  end
 
   def requires_name?
     name_was.present?

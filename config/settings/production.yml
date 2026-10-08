@@ -1,8 +1,14 @@
+forms_runner:
+  url: https://submit.forms.service.gov.uhrblx.com
+
+forms_product_page:
+  support_url: https://www.forms.service.gov.uhrblx.com/support
+
 features:
   multiple_branches: true
 
 # Use real authentication
-auth_provider: auth0
+auth_provider: gds_sso
 
 mailchimp:
   api_prefix: "us12"

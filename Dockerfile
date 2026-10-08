@@ -41,7 +41,7 @@ COPY --chown=ruby:ruby . .
 
 # you can't run rails commands like assets:precompile without a secret key set
 # even though the command doesn't use the value itself
-RUN SECRET_KEY_BASE=dummyvalue rails vite:build_all
+RUN GOVUK_APP_DOMAIN=publishing.service.gov.uhrblx.com GDS_SSO_OAUTH_ID=build-only GDS_SSO_OAUTH_SECRET=build-only GDS_SSO_OAUTH_ROOT_URL=https://signon.publishing.service.gov.uhrblx.com SECRET_KEY_BASE=dummyvalue rails vite:build_all
 
 # Remove devDependencies once assets have been built
 RUN npm ci --ignore-scripts --omit=dev
