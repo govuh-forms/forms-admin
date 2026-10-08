@@ -1,6 +1,9 @@
 class User < ApplicationRecord
-  # TODO: Drop this column in a future migration
-  self.ignored_columns += [:remotely_signed_out]
+  # The native GOV.UK GDS::SSO Warden strategy calls
+  # User.find_for_gds_oauth and user.clear_remotely_signed_out!.
+  # Both are supplied by this concern. The column must remain accessible
+  # while Forms Admin uses Signon for staff authentication.
+  include GDS::SSO::User
 
   class UserAuthenticationException < StandardError; end
 
