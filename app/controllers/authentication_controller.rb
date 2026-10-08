@@ -35,7 +35,7 @@ class AuthenticationController < WebController
 
   def sign_out
     # get current_user before user is logged out of warden
-    auth_provider = current_user&.provider
+    auth_provider = current_user&.provider.presence || Settings.auth_provider
 
     if user_signed_in
       warden.logout
