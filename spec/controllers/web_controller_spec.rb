@@ -78,6 +78,27 @@ describe WebController, type: :controller do
     end
   end
 
+  describe "#auth_strategy_permitted?" do
+    before do
+      web_controller.instance_variable_set(:@current_user, build(:user, role: :super_admin))
+    end
+
+    it "accepts a previously authenticated Signon super administrator" do
+      allow(Settings).to receive(:auth_provider).and_return("gds_sso")
+
+      expect(web_controller.send(:auth_strategy_permitted?)).to be true
+    end
+
+    it "continues to enforce the Google Apps connection for Auth0 super administrators" do
+      allow(Settings).to receive(:auth_provider).and_return("auth0")
+      proxy = instance_double(Warden::Proxy)
+      allow(proxy).to receive(:session).and_return({})
+      allow(web_controller).to receive(:warden).and_return(proxy)
+
+      expect(web_controller.send(:auth_strategy_permitted?)).to be false
+    end
+  end
+
   describe "analytics" do
     let(:user) { create :user }
 
