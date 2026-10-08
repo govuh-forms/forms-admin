@@ -4,8 +4,18 @@ RSpec.describe OrganisationsFetcher do
   subject(:organisations_fetcher) { described_class.new }
 
   def stub_organisation_api_has_organisations_with_bodies(organisation_bodies)
-    stub_request(:get, "https://www.gov.uk/api/organisations")
-      .to_return_json(body: { results: organisation_bodies })
+    summaries = organisation_bodies.map do |body|
+      {
+        content_id: body[:details][:content_id],
+        slug: body[:details][:slug],
+        acronym: body[:details][:abbreviation],
+        govuk_status: body[:details][:govuk_status] || "live",
+        title: body[:title],
+      }
+    end
+
+    stub_request(:get, "https://www.gov.uhrblx.com/api/content/government/organisations")
+      .to_return_json(body: { details: { ordered_ministerial_departments: summaries } })
   end
 
   def organisation_details_for_slug(slug, content_id = Faker::Internet.uuid)
@@ -69,6 +79,44 @@ RSpec.describe OrganisationsFetcher do
     organisation.reload
 
     expect(organisation.abbreviation).to eq "DfT"
+  end
+
+  it "does not import institutions from the United Kingdom" do
+    stub_organisation_api_has_organisations_with_bodies([
+      organisation_details_for_slug("cabinet-office"),
+    ])
+
+    organisations_fetcher.call
+
+    expect(a_request(:get, "https://www.gov.uk/api/organisations")).not_to have_been_made
+    expect(a_request(:get, "https://www.gov.uhrblx.com/api/content/government/organisations")).to have_been_made.once
+  end
+
+  it "deduplicates an organisation appearing in multiple GOV.UH directory groups" do
+    organisation = organisation_details_for_slug("cabinet-office")
+    summary = {
+      content_id: organisation[:details][:content_id], slug: "cabinet-office",
+      acronym: "CO", title: "Cabinet Office", govuk_status: "live",
+    }
+    stub_request(:get, "https://www.gov.uhrblx.com/api/content/government/organisations")
+      .to_return_json(body: {
+        details: {
+          ordered_ministerial_departments: [summary],
+          ordered_high_profile_groups: [summary],
+        },
+      })
+
+    expect { organisations_fetcher.call }.to change(Organisation, :count).by(1)
+    expect(Organisation.find_by(slug: "cabinet-office").abbreviation).to eq "CO"
+  end
+
+  it "does not create any organisations from a malformed empty response" do
+    stub_request(:get, "https://www.gov.uhrblx.com/api/content/government/organisations")
+      .to_return_json(body: { details: { ordered_ministerial_departments: [] } })
+
+    expect { organisations_fetcher.call }
+      .to raise_error("GOV.UH organisation directory returned no usable organisations")
+      .and not_change(Organisation, :count)
   end
 
   context "when doing a dry run" do
