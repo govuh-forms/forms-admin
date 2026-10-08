@@ -28,3 +28,6 @@ $govuk-global-styles: true;
 .autocomplete__dropdown-arrow-down {
   z-index: auto;
 }
+
+// Shared GOV.UH government identity adaptation, after upstream components.
+@import "../styles/uh_government_identity";
