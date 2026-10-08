@@ -50,7 +50,7 @@ class FormDocument::Content
   end
 
   def has_welsh_translation?
-    available_languages.present? && available_languages.include?("cy")
+    Settings.features.welsh_translation.enabled && available_languages.present? && available_languages.include?("cy")
   end
 
   def has_email_delivery?
