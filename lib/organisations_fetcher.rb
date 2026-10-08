@@ -1,3 +1,5 @@
+require "set"
+
 # GOV.UK is the canonical source for organisations, so we need to keep our
 # organisations up-to-date in order to provide accurate information on user
 # membership of organisations.
