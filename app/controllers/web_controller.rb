@@ -117,7 +117,10 @@ private
   end
 
   def auth_strategy_permitted?
-    return true if %w[mock_user developer].include? Settings.auth_provider
+    # GDS::SSO has already verified the Signon account and this application's
+    # OAuth access before Warden returns a user. The Auth0-only Google Apps
+    # connection check does not exist in a Signon session.
+    return true if %w[gds_sso mock_user developer].include?(Settings.auth_provider)
 
     @current_user.super_admin? ? PRIVILEGED_AUTH0_CONNECTION_STRATEGIES.include?(warden.session["auth0_connection_strategy"]) : true
   end
