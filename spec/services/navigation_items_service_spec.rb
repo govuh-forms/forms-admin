@@ -92,6 +92,21 @@ describe NavigationItemsService do
         end
       end
 
+      context "when a native Signon account has no Auth0 provider" do
+        let(:provider) { nil }
+
+        before { allow(Settings).to receive(:auth_provider).and_return("gds_sso") }
+
+        it "renders the editor navigation without raising an exception" do
+          expect { service.navigation_items }.not_to raise_error
+        end
+
+        it "includes the native Forms Admin sign-out link" do
+          signout_item = NavigationItemsService::NavigationItem.new(text: I18n.t("header.sign_out"), href: sign_out_path, active: false)
+          expect(service.navigation_items).to include(signout_item)
+        end
+      end
+
       context "when user has provider auth0" do
         let(:provider) { :auth0 }
 

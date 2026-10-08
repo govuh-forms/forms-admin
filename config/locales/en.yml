@@ -1339,6 +1339,7 @@ en:
     body: Please try again later.
     title: Sorry, there is a problem with the service
   last_signed_in_at:
+    not_recorded: Last sign-in date not recorded
     not_since_auth0_enabled: Before 3 November 2023
     not_since_last_signed_in_at_added: Sometime between 3 November 2023 and 4 November 2024
   maintenance:

@@ -35,7 +35,7 @@ class AuthenticationController < WebController
 
   def sign_out
     # get current_user before user is logged out of warden
-    auth_provider = current_user&.provider
+    auth_provider = current_user&.provider.presence || Settings.auth_provider
 
     if user_signed_in
       warden.logout
@@ -62,6 +62,12 @@ private
     }
 
     URI::HTTPS.build(host: Settings.auth0.domain, path: "/v2/logout", query: request_params.to_query).to_s
+  end
+
+  # Match the upstream gds-sso AuthenticationsController#sign_out path:
+  # after Warden destroys the local session, end the Signon session too.
+  def gds_sso_sign_out_url
+    "#{GDS::SSO::Config.oauth_root_url}/users/sign_out"
   end
 
   def developer_sign_out_url
