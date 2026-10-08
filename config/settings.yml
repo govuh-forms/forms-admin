@@ -4,6 +4,8 @@ features:
     enabled: false
   organisation_agreement:
     enabled: false
+  welsh_translation:
+    enabled: false
   custom_branding:
     enabled_by_group: true
   exit_pages:
