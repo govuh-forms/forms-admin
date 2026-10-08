@@ -364,9 +364,9 @@ Rails.application.routes.draw do
 
   get "/sitemap" => "sitemap#index", as: :sitemap
 
-  direct(:accessibility_statement) { "https://www.forms.service.gov.uk/accessibility" }
-  direct(:cookies) { "https://www.forms.service.gov.uk/cookies" }
-  direct(:privacy) { "https://www.forms.service.gov.uk/privacy" }
-  direct(:terms_of_use) { "https://www.forms.service.gov.uk/terms-of-use" }
+  direct(:accessibility_statement) { "https://forms.service.gov.uhrblx.com/accessibility" }
+  direct(:cookies) { "https://forms.service.gov.uhrblx.com/cookies" }
+  direct(:privacy) { "https://forms.service.gov.uhrblx.com/privacy" }
+  direct(:terms_of_use) { "https://forms.service.gov.uhrblx.com/terms-of-use" }
   direct(:support) { Settings.forms_product_page.support_url }
 end
