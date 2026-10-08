@@ -24,3 +24,23 @@
     border-top: 10px solid govuk-colour("yellow");
   }
 }
+
+
+// Use the active GOV.UH identity asset, not a copied logo drawing.
+// External SVG currentColor does not inherit from the surrounding header.
+.app-header__govuh-identity-logo {
+  display: inline-block;
+  width: 162px;
+  height: 30px;
+  vertical-align: middle;
+  filter: brightness(0) invert(1);
+}
+
+.app-header .app-header__product-name {
+  margin-left: 24px;
+}
+
+@media (max-width: 40.0525em) {
+  .app-header__govuh-identity-logo { width: 144px; height: auto; }
+  .app-header .app-header__product-name { margin-left: 12px; }
+}
