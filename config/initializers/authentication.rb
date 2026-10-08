@@ -1,16 +1,4 @@
 Rails.application.config.before_initialize do
-  # Configure Warden session management middleware first so it wraps the
-  # OmniAuth strategies below - this means `env["warden"]` is set up before
-  # an OmniAuth callback redirects on failure.
-  Rails.application.config.app_middleware.use(Warden::Manager) do |warden|
-    warden.default_strategies(Settings.auth_provider.to_sym)
-    warden.failure_app = AuthenticationController
-  end
-
-  # OmniAuth::Builder handles the `/auth/failure` endpoint, which OmniAuth
-  # redirects to when a strategy fails. Previously installed by the gds-sso gem.
-  Rails.application.config.app_middleware.use(OmniAuth::Builder) {}
-
   # Configure OmniAuth authentication middleware
   # add Auth0 provider
   Rails.application.config.app_middleware.use(
@@ -48,17 +36,22 @@ Rails.application.config.before_initialize do
       name: "user-research",
       username: Settings.user_research.auth.username,
       password: Settings.user_research.auth.password,
-      email_domain: "example.gov.uk",
+      email_domain: "example.gov.uhrblx.com",
     )
+  end
+
+  # gds-sso installs the Signon strategies and Warden manager. Preserve the
+  # native bearer-token strategy used by GOV.UK publishing applications.
+  Rails.application.config.app_middleware.swap Warden::Manager, Warden::Manager do |warden|
+    warden.default_strategies(Settings.auth_provider.to_sym, :gds_bearer_token)
+    warden.failure_app = AuthenticationController
   end
 end
 
 # Need to do this because Signon allows both GET and POST requests
 OmniAuth.config.allowed_request_methods = %i[post]
 
-# Previously set by the gds-sso gem's railtie. Without it OmniAuth falls back
-# to its own STDOUT logger, so strategy debug/error lines bypass Rails logging
-# (and clutter test output) instead of going through Rails.logger.
+# Route OmniAuth strategy logging through the Rails logger.
 OmniAuth.config.logger = Rails.logger
 
 # Silence the warning about extra tokens - we expect id and access_token from
