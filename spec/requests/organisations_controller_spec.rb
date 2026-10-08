@@ -196,6 +196,21 @@ RSpec.describe OrganisationsController, type: :request do
 
     include_examples "unauthorized user is forbidden"
 
+    context "when organisation agreements are disabled" do
+      before do
+        allow(Settings.features.organisation_agreement).to receive(:enabled).and_return(false)
+        login_as_super_admin_user
+        get path
+      end
+
+      it "renders the organisation instead of calling a route that does not exist" do
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include(organisation.name)
+        expect(response.body).to include(I18n.t("organisations.show.domains.heading"))
+        expect(response.body).not_to include("memorandum-of-understanding")
+      end
+    end
+
     context "when the user is a super admin" do
       before do
         login_as_super_admin_user
