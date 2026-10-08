@@ -85,11 +85,14 @@ private
   end
 
   def user_provider
-    user.provider.to_sym
+    # GDS Signon associates users using their verified UID and email, and
+    # does not populate Forms Admin's Auth0-specific provider column.
+    # Use the configured native authentication provider for those sessions.
+    (user.provider.presence || Settings.auth_provider).to_sym
   end
 
   def signout_url
-    sign_out_path if %i[auth0 developer mock_user user_research].include? user_provider
+    sign_out_path if %i[auth0 developer mock_user user_research gds_sso].include? user_provider
   end
 
   def should_show_user_profile_link?
