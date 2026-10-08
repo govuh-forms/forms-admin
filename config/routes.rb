@@ -49,16 +49,20 @@ Rails.application.routes.draw do
     get "/archive" => "forms/archive_form#archive", as: :archive_form
     post "/archive" => "forms/archive_form#update", as: :archive_form_update
     get "/archive-success" => "forms/archive_form#confirmation", as: :archive_form_confirmation
-    get "/archive-welsh" => "forms/archive_welsh#show", as: :archive_welsh
-    post "/archive-welsh" => "forms/archive_welsh#update", as: :archive_welsh_update
+    if Settings.features.welsh_translation.enabled
+      get "/archive-welsh" => "forms/archive_welsh#show", as: :archive_welsh
+      post "/archive-welsh" => "forms/archive_welsh#update", as: :archive_welsh_update
+    end
     get "/privacy-policy" => "forms/privacy_policy#new", as: :privacy_policy
     post "/privacy-policy" => "forms/privacy_policy#create"
     get "/make-live" => "forms/make_live#new", as: :make_live
     post "/make-live" => "forms/make_live#create", as: :make_live_create
-    get "/make-live/:language" => "forms/make_language_live#new", as: :make_language_live
-    post "/make-live/:language" => "forms/make_language_live#create", as: :make_language_live_create
-    get "/make-live/:language/success" => "forms/make_language_live#show_confirmation", as: :make_language_live_show_confirmation
-    post "/make-live/:language/success" => "forms/make_language_live#submit_confirmation", as: :make_language_live_submit_confirmation
+    if Settings.features.welsh_translation.enabled
+      get "/make-live/:language" => "forms/make_language_live#new", as: :make_language_live
+      post "/make-live/:language" => "forms/make_language_live#create", as: :make_language_live_create
+      get "/make-live/:language/success" => "forms/make_language_live#show_confirmation", as: :make_language_live_show_confirmation
+      post "/make-live/:language/success" => "forms/make_language_live#submit_confirmation", as: :make_language_live_submit_confirmation
+    end
     get "/unarchive" => "forms/unarchive#new", as: :unarchive
     post "/unarchive" => "forms/unarchive#create", as: :unarchive_create
     get "/what-happens-next" => "forms/what_happens_next#new", as: :what_happens_next
@@ -75,14 +79,16 @@ Rails.application.routes.draw do
     post "/brand" => "forms/brand#create", as: :form_brand_create
     get "/share-preview" => "forms/share_preview#new", as: :share_preview
     post "/share-preview" => "forms/share_preview#create", as: :share_preview_create
-    get "/welsh-translation" => "forms/welsh_translation#new", as: :welsh_translation
-    post "/welsh-translation" => "forms/welsh_translation#create", as: :welsh_translation_create
-    get "/welsh-translation/delete" => "forms/welsh_translation#delete", as: :welsh_translation_delete
-    delete "/welsh-translation/delete" => "forms/welsh_translation#destroy", as: :welsh_translation_destroy
-    post "/welsh-translation-preview" => "forms/welsh_translation#render_preview", as: :welsh_translation_render_preview
-    get "/welsh-translation-download" => "forms/welsh_translation#download", as: :welsh_translation_download
-    get "/welsh-translation-upload" => "forms/welsh_translation#show_upload", as: :welsh_translation_show_upload
-    post "/welsh-translation-upload" => "forms/welsh_translation#upload", as: :welsh_translation_upload
+    if Settings.features.welsh_translation.enabled
+      get "/welsh-translation" => "forms/welsh_translation#new", as: :welsh_translation
+      post "/welsh-translation" => "forms/welsh_translation#create", as: :welsh_translation_create
+      get "/welsh-translation/delete" => "forms/welsh_translation#delete", as: :welsh_translation_delete
+      delete "/welsh-translation/delete" => "forms/welsh_translation#destroy", as: :welsh_translation_destroy
+      post "/welsh-translation-preview" => "forms/welsh_translation#render_preview", as: :welsh_translation_render_preview
+      get "/welsh-translation-download" => "forms/welsh_translation#download", as: :welsh_translation_download
+      get "/welsh-translation-upload" => "forms/welsh_translation#show_upload", as: :welsh_translation_show_upload
+      post "/welsh-translation-upload" => "forms/welsh_translation#upload", as: :welsh_translation_upload
+    end
     get "/submission-attachments" => "forms/submission_attachments#new", as: :submission_attachments
     post "/submission-attachments" => "forms/submission_attachments#create", as: :submission_attachments_create
     get "/batch-submissions" => "forms/batch_submissions#new", as: :batch_submissions
@@ -304,7 +310,9 @@ Rails.application.routes.draw do
       get "forms-with-weekly-submission-csv", to: "reports#forms_with_weekly_submission_csv", as: :report_forms_with_weekly_submission_csv
       get "forms-with-s3-submissions", to: "reports#forms_with_s3_submissions", as: :report_forms_with_s3_submissions
       get "forms-with-exit-pages", to: "reports#forms_with_exit_pages", as: :report_forms_with_exit_pages
-      get "forms-with-welsh-translation", to: "reports#forms_with_welsh_translation", as: :report_forms_with_welsh_translation
+      if Settings.features.welsh_translation.enabled
+        get "forms-with-welsh-translation", to: "reports#forms_with_welsh_translation", as: :report_forms_with_welsh_translation
+      end
       get "forms-with-copy-of-answers-enabled", to: "reports#forms_with_copy_of_answers_enabled", as: :report_forms_with_copy_of_answers_enabled
       get "selection-questions-summary", to: "reports#selection_questions_summary", as: :report_selection_questions_summary
       get "selection-questions-with-autocomplete", to: "reports#selection_questions_with_autocomplete", as: :report_selection_questions_with_autocomplete
