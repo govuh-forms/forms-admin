@@ -145,7 +145,9 @@ module ApplicationHelper
 
     if last_signed_in_at.present?
       last_signed_in_at.to_date.to_fs
-    elsif %i[gds gds_sso].include?((user.provider.presence || Settings.auth_provider).to_sym)
+    elsif (user.provider.presence || Settings.auth_provider).to_sym == :gds_sso
+      I18n.t("last_signed_in_at.not_recorded")
+    elsif user.provider.to_s == "gds"
       I18n.t("last_signed_in_at.not_since_auth0_enabled")
     else
       I18n.t("last_signed_in_at.not_since_last_signed_in_at_added")
