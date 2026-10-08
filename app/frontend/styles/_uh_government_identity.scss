@@ -1,0 +1,24 @@
+// GOV.UH adaptation of the official GOV.UK Frontend footer.
+// GOV.UK Frontend's copyright logo is drawn on ::before using a UK Royal
+// Arms SVG, with a mask where supported. Set BOTH the image and mask here.
+//
+// The government arms remain owned and served by the GOV.UH brand estate.
+// Never copy UK Royal Arms into a GOV.UH service or replace the authorised
+// GOV.UK/GDS crown on the government header.
+.govuk-footer .govuk-footer__copyright-logo::before {
+  display: block;
+  width: 140px;
+  height: 140px;
+  padding-top: 0;
+  margin-inline: auto;
+  background-color: transparent;
+  background-image: url("https://www.gov.uhrblx.com/uh-brand/uh-government-coat-of-arms.webp");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center center;
+  -webkit-mask: none;
+  mask: none;
+}
+
+// Preserve the upstream link layout and focus/hover states. Only the
+// institutional artwork is replaced; all other GOV.UK Frontend styling remains.
