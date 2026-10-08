@@ -32,7 +32,7 @@
 .app-header .govuk-header__logo .govuk-header__homepage-link {
   display: inline-flex;
   align-items: center;
-  column-gap: 24px;
+  column-gap: 9px;
   flex-wrap: wrap;
 }
 
@@ -53,7 +53,7 @@
 
 @media (max-width: 40.0525em) {
   .app-header .govuk-header__logo .govuk-header__homepage-link {
-    column-gap: 16px;
+    column-gap: 9px;
   }
   .app-header__govuh-identity-logo {
     width: 144px;
