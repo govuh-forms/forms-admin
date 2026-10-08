@@ -18,6 +18,11 @@ RSpec.describe HeaderComponent::View, type: :component do
       expect(page).to have_text(I18n.t("header.product_name"))
     end
 
+    it "uses the approved GOV.UH identity rather than reproducing a logo" do
+      expect(page).to have_css('img.app-header__govuh-identity-logo[alt="GOV.UH"][src="https://www.gov.uhrblx.com/uh-brand/gov-uh-site-identity-logo.svg"]')
+      expect(page).to have_text(I18n.t("header.product_name"))
+    end
+
     it "has a full width border" do
       expect(page).to have_css(".govuk-header--full-width-border")
     end
