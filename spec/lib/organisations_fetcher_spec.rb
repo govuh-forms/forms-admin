@@ -114,9 +114,10 @@ RSpec.describe OrganisationsFetcher do
     stub_request(:get, "https://www.gov.uhrblx.com/api/content/government/organisations")
       .to_return_json(body: { details: { ordered_ministerial_departments: [] } })
 
-    expect { organisations_fetcher.call }
-      .to raise_error("GOV.UH organisation directory returned no usable organisations")
-      .and not_change(Organisation, :count)
+    expect {
+      expect { organisations_fetcher.call }
+        .to raise_error("GOV.UH organisation directory returned no usable organisations")
+    }.not_to change(Organisation, :count)
   end
 
   context "when doing a dry run" do
