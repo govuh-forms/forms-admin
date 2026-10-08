@@ -122,6 +122,47 @@ describe User, type: :model do
     end
   end
 
+  describe "GDS Signon OAuth integration" do
+    let(:auth_hash) do
+      {
+        "uid" => "test-signon-123",
+        "info" => { "name" => "Example Editor", "email" => "example.editor@example.test" },
+        "extra" => {
+          "user" => {
+            "permissions" => ["signin"],
+            "organisation_slug" => "cabinet-office",
+            "organisation_content_id" => "91e57ad9-29a3-4f94-9ab4-5e9ae6d13588",
+            "disabled" => false,
+          },
+        },
+      }
+    end
+
+    it "provides the native GDS SSO account-finding method required by the callback" do
+      expect(described_class).to respond_to(:find_for_gds_oauth)
+      editor = described_class.find_for_gds_oauth(auth_hash)
+      expect(editor.uid).to eq("test-signon-123")
+      expect(editor.permissions).to eq(["signin"])
+    end
+
+    it "binds an existing editor by verified Signon email without changing their Forms role" do
+      editor = create(:user, email: "example.editor@example.test", role: :super_admin)
+      expect { described_class.find_for_gds_oauth(auth_hash) }.not_to change(described_class, :count)
+      editor.reload
+      expect(editor.uid).to eq("test-signon-123")
+      expect(editor.role).to eq("super_admin")
+      expect(editor.has_access?).to be true
+    end
+
+    it "supports native Signon remote sign-out and sign-in reset" do
+      editor = described_class.find_for_gds_oauth(auth_hash)
+      editor.set_remotely_signed_out!
+      expect(editor.reload).to be_remotely_signed_out
+      editor.clear_remotely_signed_out!
+      expect(editor.reload).not_to be_remotely_signed_out
+    end
+  end
+
   describe "versioning", :versioning do
     it "enables paper trail" do
       expect(user).to be_versioned
