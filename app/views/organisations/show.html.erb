@@ -63,6 +63,7 @@
       <p class="govuk-body"><%= t("organisations.show.admin_users.none") %></p>
     <% end %>
 
+    <% if Settings.features.organisation_agreement.enabled %>
     <h2 class="govuk-heading-m"><%= t("organisations.show.mou_signatures.heading") %></h2>
     <% if @organisation.mou_signatures.any? %>
       <%= render ScrollingWrapperComponent::View.new(aria_label: t("organisations.show.mou_signatures.heading")) do |table| %>
@@ -98,6 +99,8 @@
       <%= t("organisations.show.mou_signatures.share_mou_link_html", mou_link: link_to(mou_signature_url, mou_signature_url)) %>
 
       <%= t("organisations.show.mou_signatures.share_non_crown_agreement_link_html", agreement_link: link_to(non_crown_agreement_signature_url, non_crown_agreement_signature_url)) %>
+    <% end %>
+
     <% end %>
 
     <h2 class="govuk-heading-m"><%= t("organisations.show.domains.heading") %></h2>
