@@ -1,3 +1,5 @@
+require "gds-sso/user"
+
 class User < ApplicationRecord
   # The native GOV.UK GDS::SSO Warden strategy calls
   # User.find_for_gds_oauth and user.clear_remotely_signed_out!.
