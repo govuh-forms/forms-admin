@@ -23,7 +23,9 @@
 <% if should_show_organisations_link %>
   <h2 class="govuk-heading-m"><%= link_to t("page_titles.organisations"), organisations_path %></h2>
   <ul class="govuk-list govuk-list--spaced">
+    <% if Settings.features.organisation_agreement.enabled %>
     <li><%= link_to t("page_titles.mou_signature_new"), mou_signature_url %></li>
+    <% end %>
   </ul>
 <% end %>
 

@@ -26,21 +26,37 @@
 }
 
 
-// Use the active GOV.UH identity asset, not a copied logo drawing.
-// External SVG currentColor does not inherit from the surrounding header.
+// Preserve the upstream header slots, but place the centrally owned government
+// logo and the Forms service name on one aligned flex row. Text spacing alone is
+// ineffective because GOV.UK Frontend nests both slots in the same home link.
+.app-header .govuk-header__logo .govuk-header__homepage-link {
+  display: inline-flex;
+  align-items: center;
+  column-gap: 24px;
+  flex-wrap: wrap;
+}
+
 .app-header__govuh-identity-logo {
-  display: inline-block;
+  display: block;
+  flex: none;
   width: 162px;
   height: 30px;
-  vertical-align: middle;
   filter: brightness(0) invert(1);
 }
 
-.app-header .app-header__product-name {
-  margin-left: 24px;
+.app-header .govuk-header__product-name.app-header__product-name {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  line-height: 30px;
 }
 
 @media (max-width: 40.0525em) {
-  .app-header__govuh-identity-logo { width: 144px; height: auto; }
-  .app-header .app-header__product-name { margin-left: 12px; }
+  .app-header .govuk-header__logo .govuk-header__homepage-link {
+    column-gap: 16px;
+  }
+  .app-header__govuh-identity-logo {
+    width: 144px;
+    height: auto;
+  }
 }
