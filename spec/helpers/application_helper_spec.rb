@@ -459,6 +459,17 @@ RSpec.describe ApplicationHelper, type: :helper do
       end
     end
 
+    context "when a native GDS Signon user has no legacy Auth0 provider" do
+      let(:provider) { nil }
+      let(:last_signed_in_at) { nil }
+
+      before { allow(Settings).to receive(:auth_provider).and_return("gds_sso") }
+
+      it "reports missing data without inventing a historic sign-in date" do
+        expect(date_last_signed_in_at).to eq("Last sign-in date not recorded")
+      end
+    end
+
     context "when user has not signed in since Auth0 was enabled" do
       let(:provider) { :gds }
       let(:last_signed_in_at) { nil }
