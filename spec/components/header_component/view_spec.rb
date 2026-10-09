@@ -19,7 +19,8 @@ RSpec.describe HeaderComponent::View, type: :component do
     end
 
     it "uses the approved GOV.UH identity rather than reproducing a logo" do
-      expect(page).to have_css('img.app-header__govuh-identity-logo[alt="GOV.UH"][src="https://www.gov.uhrblx.com/uh-brand/gov-uh-site-identity-logo.svg"]')
+      expect(page).to have_css('img.govuk-header__logotype.app-header__govuh-identity-logo[alt="GOV.UH"][src="https://www.gov.uhrblx.com/uh-brand/gov-uh-site-identity-logo.svg"]')
+      expect(page).to have_css(".govuk-header__product-name", text: I18n.t("header.product_name"))
       expect(page).to have_text(I18n.t("header.product_name"))
     end
 

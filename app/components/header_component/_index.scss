@@ -1,8 +1,8 @@
-.app-header__product-name {
-  display: inline-flex;
-  align-items: center;
-  gap: .25em;
-  flex-wrap: wrap;
+// Use the native GOV.UK Header component for the complete Forms Admin application.
+// The authorised GOV.UH SVG replaces the government wordmark without modifying
+// the component's baseline, spacing, product-name typography or responsive layout.
+.app-header__product-name .govuk-tag {
+  margin-left: .25em;
 }
 
 .app-header :is(.govuk-header__logo, .govuk-header__content) {
@@ -25,38 +25,10 @@
   }
 }
 
-
-// Preserve the upstream header slots, but place the centrally owned government
-// logo and the Forms service name on one aligned flex row. Text spacing alone is
-// ineffective because GOV.UK Frontend nests both slots in the same home link.
-.app-header .govuk-header__logo .govuk-header__homepage-link {
-  display: inline-flex;
-  align-items: center;
-  column-gap: 9px;
-  flex-wrap: wrap;
-}
-
+// The .govuk-header__logotype class supplies the upstream 7px right margin,
+// 2px lower margin and 30px baseline-aligned dimensions on every admin page.
 .app-header__govuh-identity-logo {
-  display: block;
-  flex: none;
   width: 162px;
   height: 30px;
   filter: brightness(0) invert(1);
-}
-
-.app-header .govuk-header__product-name.app-header__product-name {
-  display: inline-flex;
-  align-items: center;
-  margin: 0;
-  line-height: 30px;
-}
-
-@media (max-width: 40.0525em) {
-  .app-header .govuk-header__logo .govuk-header__homepage-link {
-    column-gap: 9px;
-  }
-  .app-header__govuh-identity-logo {
-    width: 144px;
-    height: auto;
-  }
 }

@@ -1,11 +1,19 @@
 name: "Build image"
+
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-  merge_group:
-    types: [checks_requested]
+
+permissions:
+  contents: read
+
 jobs:
   build-image:
-    uses: govuk-forms/forms-deploy/.github/workflows/reusable-build-image.yml@main
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Build Forms Admin application without publishing
+        run: docker build --progress=plain --tag "govuh-forms-admin:ci-${{ github.sha }}" .

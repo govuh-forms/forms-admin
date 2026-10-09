@@ -12,7 +12,6 @@ FROM base AS build
 WORKDIR /app
 
 RUN apk update
-RUN apk upgrade --available
 RUN apk add libc6-compat openssl-dev build-base libpq-dev nodejs=~${NODEJS_VERSION} npm git python3 yaml-dev
 RUN adduser -D ruby
 RUN mkdir /node_modules && chown ruby:ruby -R /node_modules /app
@@ -56,7 +55,6 @@ ENV RAILS_ENV="${RAILS_ENV:-production}" \
 WORKDIR /app
 
 RUN apk update
-RUN apk upgrade --available
 RUN apk add libc6-compat openssl-dev libpq
 
 
