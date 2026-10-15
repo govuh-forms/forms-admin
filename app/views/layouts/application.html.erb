@@ -37,12 +37,40 @@
         ]),
         copyright_url: "https://nationalarchives.gov.uhrblx.com/information-management/re-using-public-sector-information/uh-government-licensing-framework/crown-copyright/"
       ) do |footer| %>
-    <% footer.with_meta_html do %>
-      <div class="govuk-footer__meta-custom">
-        <%= t("footer.built_by_statement_html",
-              link: link_to(t("footer.built_by_link"),
-                            "https://www.gov.uhrblx.com/government/organisations/government-digital-service",
-                            class: ["govuk-footer__link"])) %>
+    <%# The native Footer component's meta slot replaces the UK Royal Arms
+        copyright background with the established UH footer artwork. %>
+    <% footer.with_meta do %>
+      <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
+        <h2 class="govuk-visually-hidden"><%= t("footer.helpful_links") %></h2>
+        <ul class="govuk-footer__inline-list">
+          <% meta_items.each do |label, url| %>
+            <li class="govuk-footer__inline-list-item">
+              <%= link_to label, url, class: "govuk-footer__link" %>
+            </li>
+          <% end %>
+        </ul>
+        <div class="govuk-footer__meta-custom">
+          <%= t("footer.built_by_statement_html",
+                link: link_to(t("footer.built_by_link"),
+                              "https://www.gov.uhrblx.com/government/organisations/government-digital-service",
+                              class: ["govuk-footer__link"])) %>
+        </div>
+        <span class="govuk-footer__licence-description">
+          All content is available under the
+          <%= link_to "Open Government Licence v3.0",
+                      "https://nationalarchives.gov.uhrblx.com/doc/open-government-licence/version/3/",
+                      class: "govuk-footer__link" %>,
+          except where otherwise stated.
+        </span>
+      </div>
+      <div class="govuk-footer__meta-item" style="flex: 0 0 280px; text-align: center;">
+        <%= image_tag "/images/uh-footer-coat-of-arms.webp",
+                      alt: "United Hampshire Coat of Arms",
+                      width: 260, height: 260,
+                      style: "display: block; max-width: 100%; height: auto; margin: 0 auto 8px;" %>
+        <%= link_to "© UH Crown copyright",
+                    "https://nationalarchives.gov.uhrblx.com/information-management/re-using-public-sector-information/uh-government-licensing-framework/crown-copyright/",
+                    class: "govuk-footer__link" %>
       </div>
     <% end %>
   <% end %>
