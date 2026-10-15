@@ -12,6 +12,12 @@
 
     <%= t(".body_html") %>
 
+    <% if @current_user.super_admin? %>
+      <%= f.govuk_collection_select :organisation_id, Organisation.order(:name), :id, :name_with_abbreviation,
+            label: { text: "Organisation", size: 'm', tag: 'h2' },
+            options: { include_blank: false } %>
+    <% end %>
+
     <%= f.govuk_text_field :name, label: {  tag: 'h2', size: 'm' } %>
 
     <%= f.govuk_submit t("save_and_continue") %>

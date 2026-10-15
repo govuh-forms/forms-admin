@@ -31,20 +31,20 @@ class GroupsController < WebController
   def confirm_new
     authorize Group, :new?
     @confirm_new_input = Groups::ConfirmNewInput.new
-    @organisation = @current_user.organisation
+    @organisation = new_group_organisation
   end
 
   def confirm_new_submit
     authorize Group, :new?
     @confirm_new_input = Groups::ConfirmNewInput.new(confirm_new_input_params)
-    @organisation = @current_user.organisation
+    @organisation = new_group_organisation
 
     if @confirm_new_input.invalid?
       return render :confirm_new, status: :unprocessable_content
     end
 
     if @confirm_new_input.confirmed?
-      redirect_to new_group_path
+      redirect_to new_group_path(organisation_id: @organisation.id)
     else
       redirect_to groups_path
     end
@@ -52,7 +52,7 @@ class GroupsController < WebController
 
   # GET /groups/new
   def new
-    @group = Group.new
+    @group = Group.new(organisation: new_group_organisation)
     authorize @group
   end
 
@@ -64,8 +64,18 @@ class GroupsController < WebController
   # POST /groups
   def create
     @group = Group.new(group_params.merge({ creator: @current_user }))
-    @group.organisation = current_user.organisation
-    @group.memberships.build(user: current_user, added_by: current_user, role: :group_admin)
+    # A super administrator may create an organisation-owned group for an
+    # organisation without any Forms users. Do not attach a super administrator
+    # from a different organisation as a fictitious group member.
+    @group.organisation = if current_user.super_admin?
+      group_params[:organisation_id].present? ?
+        Organisation.find_by(id: group_params[:organisation_id]) : current_user.organisation
+    else
+      current_user.organisation
+    end
+    if @group.organisation == current_user.organisation
+      @group.memberships.build(user: current_user, added_by: current_user, role: :group_admin)
+    end
 
     authorize @group
 
@@ -215,6 +225,14 @@ private
   # Use callbacks to share common setup or constraints between actions.
   def set_group
     @group = Group.find_by!(external_id: params[:id])
+  end
+
+  def new_group_organisation
+    if @current_user.super_admin? && params[:organisation_id].present?
+      Organisation.find_by(id: params[:organisation_id]) || @current_user.organisation
+    else
+      @current_user.organisation
+    end
   end
 
   # Only allow a list of trusted parameters through.

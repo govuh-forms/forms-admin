@@ -33,7 +33,7 @@
             f,
             attribute_name: :organisation_id,
             form_field: f.govuk_collection_select(:organisation_id,
-                                                  Organisation.with_users.order(:name),
+                                                  Organisation.where(id: User.select(:organisation_id)).or(Organisation.where(id: Group.select(:organisation_id))).distinct.order(:name),
                                                   :id,
                                                   :name_with_abbreviation,
                                                   class: ['govuk-!-width-three-quarters'],
@@ -52,8 +52,8 @@
     <%= render GroupListComponent::View.new(groups: @active_groups, title: t('groups.index.active_title'), empty_message: t('groups.index.active_empty_message')) %>
     <%= render GroupListComponent::View.new(groups: @trial_groups, title: t('groups.index.trial_title'), empty_message: t('groups.index.trial_empty_message')) %>
 
-    <% if @organisation == @current_user.organisation %>
-      <%= govuk_button_link_to t("groups.index.create_group"), confirm_new_groups_path, class:"govuk-!-margin-top-3" %>
+    <% if @organisation == @current_user.organisation || @current_user.super_admin? %>
+      <%= govuk_button_link_to t("groups.index.create_group"), confirm_new_groups_path(organisation_id: @organisation.id), class:"govuk-!-margin-top-3" %>
     <% end %>
   </div>
 </div>
