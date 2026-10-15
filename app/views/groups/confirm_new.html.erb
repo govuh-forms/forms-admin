@@ -4,6 +4,9 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <%= form_with(model: @confirm_new_input, url: confirm_new_groups_path) do |f| %>
+      <% if @current_user.super_admin? %>
+        <%= hidden_field_tag :organisation_id, @organisation.id %>
+      <% end %>
       <% if @confirm_new_input&.errors.any? %>
         <%= f.govuk_error_summary %>
       <% end %>
