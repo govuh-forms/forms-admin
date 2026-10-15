@@ -145,6 +145,11 @@ private
   end
 
   def translations_section(section_number:)
+    # The GOV.UH service intentionally disables Welsh translations. Rails does
+    # not register welsh_translation_path when that feature flag is false.
+    # Do not construct or show a task for a route which does not exist.
+    return nil unless Settings.features.welsh_translation.enabled
+
     {
       title: I18n.t("forms.task_list_#{create_or_edit}.translations_section.title"),
       rows: translations_section_task,
@@ -273,6 +278,7 @@ private
 
   def statuses_by_user
     statuses = @task_statuses
+    statuses.delete(:welsh_language_status) unless Settings.features.welsh_translation.enabled
 
     unless Pundit.policy(@current_user, @form).can_make_form_live?
       statuses.delete(:share_preview_status)
