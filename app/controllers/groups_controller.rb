@@ -68,7 +68,8 @@ class GroupsController < WebController
     # organisation without any Forms users. Do not attach a super administrator
     # from a different organisation as a fictitious group member.
     @group.organisation = if current_user.super_admin?
-      Organisation.find_by(id: group_params[:organisation_id])
+      group_params[:organisation_id].present? ?
+        Organisation.find_by(id: group_params[:organisation_id]) : current_user.organisation
     else
       current_user.organisation
     end
