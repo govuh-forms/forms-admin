@@ -65,10 +65,7 @@ private
     GroupMemberMailer.added_to_group(new_membership, group_url: group_url(group, host:)).deliver_now
     true
   rescue StandardError => error
-    Rails.logger.warn(
-      "Forms group membership saved but email notification was not confirmed",
-      { group_id: group.id, user_id: invited_user.id, error_type: error.class.name }
-    )
+    Rails.logger.warn("Forms group membership saved but email notification was not confirmed; group_id=#{group.id} user_id=#{invited_user.id} error_type=#{error.class.name}")
     false
   end
 
