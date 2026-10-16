@@ -91,6 +91,7 @@ describe GroupMemberInput do
           group_member_input.creator = user
           group_member_input.host = "example.net"
 
+          allow(Settings.govuk_notify).to receive(:api_key).and_return("test-configured-notify-key")
           delivery = double
           allow(GroupMemberMailer).to receive(:added_to_group).with(an_instance_of(Membership), group_url: group_url(group, host: "example.net")).and_return(delivery)
           allow(delivery).to receive(:deliver_now).with(no_args)
@@ -100,6 +101,19 @@ describe GroupMemberInput do
           expect(group_member_input.submit).to be true
           expect(group_member_input).to be_valid
           expect(GroupMemberMailer).to have_received(:added_to_group).with(an_instance_of(Membership), group_url: group_url(group, host: "example.net"))
+        end
+
+        it "keeps the membership when notification delivery is unavailable" do
+          allow(Settings.govuk_notify).to receive(:api_key).and_return("changeme")
+          expect { group_member_input.submit }.to change(Membership, :count).by(1)
+          expect(group_member_input.notification_sent?).to be false
+          expect(GroupMemberMailer).not_to have_received(:added_to_group)
+        end
+
+        it "reports a failed delivery separately from the membership grant" do
+          allow(GroupMemberMailer).to receive(:added_to_group).and_raise(StandardError, "notify temporarily unavailable")
+          expect { group_member_input.submit }.to change(Membership, :count).by(1)
+          expect(group_member_input.notification_sent?).to be false
         end
       end
     end
