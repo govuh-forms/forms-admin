@@ -89,6 +89,16 @@ private
   end
 
   def how_you_get_completed_forms_section_tasks
+    if @form.only_s3_delivery_enabled?
+      return [{
+        task_name: "Deliver completed forms securely to the receiving service",
+        path: nil,
+        hint_text: "Completed answers are delivered as native JSON to the organisation's restricted receiving system. The delivery destination is maintained by authorised service administrators.",
+        status: @task_statuses[:submission_email_status],
+        active: false,
+      }]
+    end
+
     hint_text = I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.hint_text_html", submission_email: @form.submission_email) if @form.submission_email.present?
     [{ task_name: I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.email"), path: submission_email_input_path(@form.id), hint_text:, status: @task_statuses[:submission_email_status] },
      { task_name: I18n.t("forms.task_list_#{create_or_edit}.how_you_get_completed_forms_section.confirm_email"), path: submission_email_code_path(@form.id), status: @task_statuses[:confirm_submission_email_status], active: can_enter_submission_email_code }]

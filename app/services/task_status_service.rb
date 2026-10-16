@@ -180,6 +180,8 @@ private
   end
 
   def submission_email_status
+    return private_s3_delivery_ready? ? :completed : :not_started if @form.only_s3_delivery_enabled?
+
     {
       email_set_without_confirmation: :completed,
       not_started: :not_started,
@@ -189,11 +191,24 @@ private
   end
 
   def confirm_submission_email_status
+    return private_s3_delivery_ready? ? :completed : :cannot_start if @form.only_s3_delivery_enabled?
+
     {
       email_set_without_confirmation: :completed,
       not_started: :cannot_start,
       sent: :not_started,
       confirmed: :completed,
     }[@form.email_confirmation_status]
+  end
+
+  def private_s3_delivery_ready?
+    configuration = @form.s3_delivery_configuration
+    configuration.present? &&
+      configuration.delivery_schedule == "immediate" &&
+      configuration.formats == %w[json] &&
+      @form.s3_bucket_name.present? &&
+      @form.s3_bucket_region.present? &&
+      @form.submission_email.blank? &&
+      @form.file_upload_question_count.zero?
   end
 end
