@@ -81,7 +81,7 @@ RSpec.describe "/groups/:group_id/members", type: :request do
 
       it "shows a success flash message" do
         post group_members_url(group), params: { group_member_input: { member_email_address: user.email } }
-        expect(flash[:success]).to eq("A User has been added to this group and we’ve sent them an email to let them know")
+        expect(flash[:success]).to eq("A User has been added to this group. We could not confirm an invitation email was sent. Share this group's link with them directly once they have GOV.UH Signon access.")
       end
 
       context "and I'm an editor" do
