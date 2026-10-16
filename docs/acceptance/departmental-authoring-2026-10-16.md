@@ -50,3 +50,18 @@ Both forms remain **draft**, have no live version, no delivery recipient and no 
 No paid browser service, provider subscription, supplementary VPS or other new paid service was used to create, change, preview or back up these native Forms.
 
 The implementation is complete **for the stated departmental-form navigation and draft form authoring changes only**. It is not complete for casework, official publication or the whole Government operational application estate.
+
+
+## Human editor membership repair — deployed 16 October 2026
+
+The live Forms Admin had an unconditional GOV.UK Notify invitation after saving a group member. The running Notify API key was the default placeholder `changeme`. Under the old flow, the membership was saved and the attempted email could fail, presenting the administrator with an HTTP 500 while the access record already existed. The native success message nevertheless claimed an email had been sent. This was an operational blocker for human authoring and a source of duplicate attempts.
+
+- [PR #16](https://github.com/govuh-forms/forms-admin/pull/16) merged as `fcebc1537a146f0357c0a7f2380c600fac52e85a`.
+- Changed only existing `GroupMemberInput`, `GroupMembersController` and their normal English translations; no new account provider, universal staff portal, email subscription, or unauthorised organisational role.
+- The existing membership validation and organisation restriction remain. The group member is saved independently of a notification. If the key is missing or still `changeme`, no email attempt occurs. If delivery fails after a valid key is configured, the record is preserved and the failure is logged without exposing email credentials. The UI now confirms membership with truthful language indicating unconfirmed email, and directs the administrator to share the normal group link directly.
+- Test coverage added for successful delivery, missing Notify credentials and delivery error after membership creation. The source RSpec tests are committed; production Rails image does not include development RSpec gems.
+- Ruby syntax and YAML parsing passed. A transaction-isolated acceptance test using the *existing* authorised GOV.UH Signon-linked user created a real native group and member through the model, verified `notification_sent? == false` with the placeholder key, then rolled all test records back. This test was repeated successfully against the **deployed runtime image**.
+- Canonical Forms Admin (public Caddy target 127.0.0.1:5929) now runs Docker image ID `sha256:101c4f046d9a302c73c7a69adfab0eec5989173c5876026084264a79ff0a45dc` with a matching source-revision label. HTTPS sign-in returned HTTP 200; unauthenticated /groups remained appropriately protected with HTTP 302. The running container reported zero restarts and retained the correct original UH Coat of Arms and UH Crown copyright. Prior image `sha256:bb2327eaaf76723c793d609ec9886826c78dac77484d16c8ca674f349ba97571` and the stopped old container were retained for rollback.
+- No Interior Office ordinary human editor has yet signed in or been formally assigned group membership; no user accounts or office-holder roles were invented. A normal authorised editor must first establish an actual Signon account and be enabled by the competent Forms organisation administrator.
+
+**Limit:** This makes the group permission workflow work without requiring a paid email service. It does not establish any external mail/notification delivery for casework submissions, nor convert Forms Admin into an Interior Office casework system.
