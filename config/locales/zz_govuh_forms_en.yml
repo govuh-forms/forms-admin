@@ -1,0 +1,11 @@
+en:
+  groups:
+    show:
+      trial_banner:
+        request_upgrade:
+          organisation_requirements_html: |
+            <p>Before the organisation can publish forms, its authorised representative must:</p>
+            <ul class="govuk-list govuk-list--bullet">
+              <li>accept the current GOV.UH Forms organisation agreement</li>
+              <li>designate an authorised GOV.UH Forms organisation administrator</li>
+            </ul>
