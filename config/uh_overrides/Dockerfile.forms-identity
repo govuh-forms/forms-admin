@@ -1,0 +1,8 @@
+FROM govuh/forms-admin:cross-department-minimal-20261020
+USER root
+COPY --chown=ruby:ruby app/views/layouts/base.html.erb /app/app/views/layouts/base.html.erb
+COPY --chown=ruby:ruby config/uh_overrides/footer_component.html.erb /usr/local/bundle/gems/govuk-components-6.5.0/app/components/govuk_component/footer_component.html.erb
+COPY --chown=ruby:ruby public/uh-brand/ /app/public/uh-brand/
+COPY --chown=ruby:ruby public/manifest.json /app/public/manifest.json
+LABEL govuh.identity.release="approved-uh-masters-20261020"
+USER ruby
