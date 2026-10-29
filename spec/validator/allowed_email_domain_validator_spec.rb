@@ -39,6 +39,23 @@ RSpec.describe AllowedEmailDomainValidator do
     expect(model).to be_valid
   end
 
+  it "validates an established UH government recipient" do
+    model.email = "ministerial-eoi@cabinetoffice.gov.uhrblx.com"
+    expect(model).to be_valid
+  end
+
+  it "validates a nested UH government department domain regardless of case" do
+    model.email = "recipient@CMO.CABINETOFFICE.GOV.UHRBLX.COM"
+    expect(model).to be_valid
+  end
+
+  it "rejects non-government lookalike addresses" do
+    %w[recipient@fakegov.uhrblx.com recipient@gov.uhrblx.com.evil.example recipient@example.com].each do |address|
+      model.email = address
+      expect(model).to be_invalid
+    end
+  end
+
   it "validates email with .mod.uk" do
     model.email = "test.mod.uk"
     expect(model).to be_valid

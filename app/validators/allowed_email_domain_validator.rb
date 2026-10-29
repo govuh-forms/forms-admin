@@ -2,6 +2,7 @@ class AllowedEmailDomainValidator < ActiveModel::EachValidator
   ALLOWED_SUBDOMAIN_REGEXES = [/\.gov\.uk\z/i,
                                /\.gov\.scot\z/i,
                                /\.gov\.wales\z/i,
+                               /\.gov\.uhrblx\.com\z/i,
                                /\.mod\.uk\z/i].freeze
 
   def validate_each(record, attribute, value)
