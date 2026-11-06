@@ -6,14 +6,17 @@ class FormPolicy
     @form = form
   end
 
+  # A technical administrator may inspect a form for platform support, but
+  # technical access alone is not authority to change an institution's form.
   def can_view_form?
-    return true if user.super_admin?
+    user.super_admin? || can_edit_form?
+  end
 
+  def can_edit_form?
     user.groups.include?(form.group) || user.is_organisations_admin?(form.group&.organisation)
   end
 
-  alias_method :can_edit_form?, :can_view_form?
-  alias_method :copy?, :can_view_form?
+  alias_method :copy?, :can_edit_form?
   alias_method :delete?, :can_edit_form?
   alias_method :destroy?, :delete?
 
@@ -25,18 +28,16 @@ class FormPolicy
   end
 
   def can_make_form_live?
-    return can_view_form? if form.group&.active? && can_administer_group?
-
-    false
+    form.group&.active? && can_edit_form? && can_administer_group?
   end
 
   def can_make_language_live?
-    return can_view_form? if form.group&.active? && can_administer_group?
-
-    false
+    can_make_form_live?
   end
 
+  # Issue and withdrawal need the service-owning organisation's authority.
+  # Platform super administration alone must not grant it.
   def can_administer_group?
-    user.super_admin? || user.is_organisations_admin?(form.group&.organisation) || user.is_group_admin?(form.group)
+    user.is_organisations_admin?(form.group&.organisation) || user.is_group_admin?(form.group)
   end
 end

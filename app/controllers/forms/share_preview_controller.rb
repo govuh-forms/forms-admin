@@ -18,7 +18,7 @@ module Forms
     end
 
     def check_user_has_permission
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
     end
 
     def mark_complete_input_params

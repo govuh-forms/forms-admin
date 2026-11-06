@@ -3,12 +3,12 @@ module Forms
     before_action :has_email_delivery_configuration?
 
     def new
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
       @submission_attachments_input = SubmissionAttachmentsInput.new(form: current_form).assign_form_values
     end
 
     def create
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
       @submission_attachments_input = SubmissionAttachmentsInput.new(submission_attachments_input_params)
 
       if @submission_attachments_input.submit

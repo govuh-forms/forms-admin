@@ -1,6 +1,7 @@
 class GroupFormPolicy < ApplicationPolicy
   def new?
-    Pundit.policy!(user, record.group).show?
+    group = record.group
+    user.is_organisations_admin?(group.organisation) || user.groups.include?(group)
   end
 
   alias_method :create?, :new?
@@ -16,6 +17,6 @@ class GroupFormPolicy < ApplicationPolicy
 private
 
   def organisation_admin_or_super_admin?
-    user.super_admin? || user.is_organisations_admin?(record.group.organisation)
+    user.is_organisations_admin?(record.group.organisation)
   end
 end

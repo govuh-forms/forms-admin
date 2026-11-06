@@ -1,12 +1,12 @@
 module Forms
   class ChangeNameController < FormsController
     def edit
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
       @name_input = NameInput.new(form: current_form).assign_form_values
     end
 
     def update
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
       @name_input = NameInput.new(name_input_params(current_form))
 
       if @name_input.submit
