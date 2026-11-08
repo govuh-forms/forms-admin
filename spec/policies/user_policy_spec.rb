@@ -13,8 +13,12 @@ describe UserPolicy do
       expect(described_class.new(user, user)).to forbid_action(:can_change_user)
     end
 
-    it "allows managing another account subject to institutional authorisation" do
+    it "allows support editing of another account only" do
       expect(described_class.new(user, records.first)).to permit_action(:can_change_user)
+    end
+
+    it "forbids changing any account identity, institutional role or entitlement" do
+      expect(described_class.new(user, records.first)).to forbid_action(:can_change_identity)
     end
   end
 

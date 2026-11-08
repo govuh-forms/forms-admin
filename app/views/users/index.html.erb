@@ -94,7 +94,11 @@
           body.with_row do |row|
             row.with_cell(text: user.name || t("users.index.name_blank"))
             row.with_cell do
-              govuk_link_to(user.email, edit_user_path(user))
+              if user.id == current_user.id
+                user.email
+              else
+                govuk_link_to(user.email, edit_user_path(user))
+              end
             end
             row.with_cell(text: user.organisation&.name || t("users.index.organisation_blank"))
             row.with_cell(text: t("users.roles.#{user.role}.name"))

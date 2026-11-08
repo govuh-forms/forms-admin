@@ -9,7 +9,7 @@ RSpec.describe GroupPolicy do
   context "when user is super_admin" do
     let(:user) { build :super_admin_user }
 
-    it { is_expected.to permit_actions(%i[delete destroy]) }
+    it { is_expected.to forbid_actions(%i[new create edit update add_editor move delete destroy]) }
 
     it "forbids activation, approval and appointment of an issuing group administrator" do
       expect(policy).to forbid_actions(%i[upgrade add_group_admin review_upgrade])

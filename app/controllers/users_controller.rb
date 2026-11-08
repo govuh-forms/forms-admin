@@ -32,8 +32,11 @@ class UsersController < WebController
 
   def update
     authorize user, :can_change_user?
+    permitted_params = user_params
+    identity_fields = %w[role organisation_id has_access]
+    authorize user, :can_change_identity? if (permitted_params.keys & identity_fields).any?
 
-    if UserUpdateService.new(user, user_params).update_user
+    if UserUpdateService.new(user, permitted_params).update_user
       redirect_to users_path
     else
       render :edit, status: :unprocessable_content

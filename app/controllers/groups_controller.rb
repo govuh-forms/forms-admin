@@ -64,20 +64,11 @@ class GroupsController < WebController
   # POST /groups
   def create
     @group = Group.new(group_params.merge({ creator: @current_user }))
-    # A super administrator may create an organisation-owned group for an
-    # organisation without any Forms users. Do not attach a super administrator
-    # from a different organisation as a fictitious group member.
-    @group.organisation = if current_user.super_admin?
-      group_params[:organisation_id].present? ?
-        Organisation.find_by(id: group_params[:organisation_id]) : current_user.organisation
-    else
-      current_user.organisation
-    end
-    if @group.organisation == current_user.organisation
-      @group.memberships.build(user: current_user, added_by: current_user, role: :group_admin)
-    end
-
+    # An institution creates its own group. Platform support may inspect it,
+    # but must not appoint itself or create groups in another institution.
+    @group.organisation = current_user.organisation
     authorize @group
+    @group.memberships.build(user: current_user, added_by: current_user, role: :group_admin)
 
     if @group.save
       redirect_to @group

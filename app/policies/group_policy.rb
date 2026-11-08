@@ -1,6 +1,6 @@
 class GroupPolicy < ApplicationPolicy
   def new?
-    true
+    !user.super_admin? && !user.organisation.nil?
   end
   alias_method :create?, :new?
 
@@ -9,14 +9,16 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def edit?
-    organisation_admin_or_super_admin? || group_admin?
+    owning_organisation_admin? || group_admin?
   end
 
   alias_method :update?, :edit?
   alias_method :add_editor?, :edit?
 
+  # Moving a group changes the institution responsible for its forms. It needs
+  # a separately approved transfer between institutions, not support access.
   def move?
-    user.super_admin?
+    false
   end
 
   def manage_feature_flags?
@@ -24,7 +26,7 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def delete?
-    organisation_admin_or_super_admin?
+    owning_organisation_admin?
   end
 
   alias_method :destroy?, :delete?

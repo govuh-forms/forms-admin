@@ -19,4 +19,11 @@ class UserPolicy < ApplicationPolicy
   def can_change_user?
     can_manage_user? && record != user
   end
+
+  # P0 owns identity, entitlement and issuer provisioning. Until delegated
+  # institutional grants are verified, technical support may not change these
+  # attributes through Forms Admin, even when editing another account.
+  def can_change_identity?
+    false
+  end
 end

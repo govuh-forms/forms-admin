@@ -2443,6 +2443,7 @@ en:
     edit:
       access: Permission to access GOV.UH Forms
       caption: User details
+      identity_administration_notice: You can change the display name here. Your organisation’s authorised staff administrator manages roles, organisational assignments and access.
       first_signed_in: First signed in
       has_access: Access to GOV.UH Forms
       last_signed_in: Last signed in
