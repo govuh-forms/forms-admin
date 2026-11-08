@@ -12,8 +12,8 @@ RSpec.describe MembershipPolicy do
   context "when user is super_admin" do
     let(:user) { build :super_admin_user }
 
-    it "permits all actions" do
-      expect(policy).to permit_all_actions
+    it "cannot promote, remove or replace an institution's group members" do
+      expect(policy).to forbid_all_actions
     end
   end
 

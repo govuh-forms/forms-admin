@@ -26,12 +26,12 @@ class UsersController < WebController
   end
 
   def edit
-    authorize current_user, :can_manage_user?
+    authorize user, :can_change_user?
     user
   end
 
   def update
-    authorize current_user, :can_manage_user?
+    authorize user, :can_change_user?
 
     if UserUpdateService.new(user, user_params).update_user
       redirect_to users_path

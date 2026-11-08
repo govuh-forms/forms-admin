@@ -29,12 +29,14 @@ class GroupPolicy < ApplicationPolicy
 
   alias_method :destroy?, :delete?
 
+  # Activating a group and appointing its administrators permits forms to be
+  # issued. Technical super administration alone is not an issuing mandate.
   def upgrade?
-    organisation_admin_or_super_admin? && (!Settings.features.organisation_agreement.enabled || record.organisation.mou_signatures.present?)
+    owning_organisation_admin? && (!Settings.features.organisation_agreement.enabled || record.organisation.mou_signatures.present?)
   end
 
   def add_group_admin?
-    organisation_admin_or_super_admin?
+    owning_organisation_admin?
   end
 
   def request_upgrade?
@@ -42,13 +44,17 @@ class GroupPolicy < ApplicationPolicy
   end
 
   def review_upgrade?
-    organisation_admin_or_super_admin? && record.upgrade_requested?
+    owning_organisation_admin? && record.upgrade_requested?
   end
 
 private
 
   def organisation_admin_or_super_admin?
-    user.super_admin? || user.is_organisations_admin?(record.organisation)
+    user.super_admin? || owning_organisation_admin?
+  end
+
+  def owning_organisation_admin?
+    user.is_organisations_admin?(record.organisation)
   end
 
   def group_admin?

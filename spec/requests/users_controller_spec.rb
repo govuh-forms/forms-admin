@@ -240,6 +240,19 @@ RSpec.describe UsersController, type: :request do
         expect(user.reload.name).to eq "Fakey McFakeName"
       end
 
+      it "does not allow a technical administrator to change their own role" do
+        original_role = super_admin_user.role
+        patch user_path(super_admin_user), params: { user: { role: "organisation_admin", organisation_id: test_org.id } }
+        expect(response).to have_http_status(:forbidden)
+        expect(super_admin_user.reload.role).to eq(original_role)
+      end
+
+      it "does not allow a technical administrator to edit their own access" do
+        patch user_path(super_admin_user), params: { user: { has_access: false } }
+        expect(response).to have_http_status(:forbidden)
+        expect(super_admin_user.reload.has_access).to be true
+      end
+
       it "can update whether user has access" do
         patch user_path(user), params: { user: { has_access: false } }
         expect(user.reload.has_access).to be false

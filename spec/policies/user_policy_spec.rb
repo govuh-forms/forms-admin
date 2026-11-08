@@ -8,6 +8,14 @@ describe UserPolicy do
 
   context "with super admin role" do
     it { is_expected.to permit_actions(%i[can_manage_user]) }
+
+    it "forbids changing the administrator's own role or organisation" do
+      expect(described_class.new(user, user)).to forbid_action(:can_change_user)
+    end
+
+    it "allows managing another account subject to institutional authorisation" do
+      expect(described_class.new(user, records.first)).to permit_action(:can_change_user)
+    end
   end
 
   context "with standard role" do
