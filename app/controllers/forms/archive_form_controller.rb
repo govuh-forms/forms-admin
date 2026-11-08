@@ -1,6 +1,6 @@
 module Forms
   class ArchiveFormController < FormsController
-    before_action :check_user_has_permission
+    before_action :check_user_has_permission, only: %i[archive update]
 
     def archive
       return redirect_to path_to_form unless current_form.is_live?
@@ -22,13 +22,14 @@ module Forms
     end
 
     def confirmation
+      authorize current_form, :can_view_form?
       render :confirmation, locals: { form: current_form }
     end
 
   private
 
     def check_user_has_permission
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_make_form_live?
     end
 
     def path_to_form

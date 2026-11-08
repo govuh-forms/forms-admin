@@ -18,6 +18,12 @@ describe GroupFormPolicy do
     it { is_expected.to forbid_all_actions }
   end
 
+  context "when technical super administrator is not a member of the institution" do
+    let(:user) { build :super_admin_user }
+
+    it { is_expected.to forbid_all_actions }
+  end
+
   context "when user is org admin" do
     let(:user) { build :organisation_admin_user, organisation: group.organisation }
 

@@ -231,11 +231,11 @@ RSpec.describe "/groups", type: :request do
         expect(response).to have_http_status(:forbidden)
       end
 
-      context "when logged in as a super admin" do
-        it "is allowed" do
+      context "when logged in as a technical super admin" do
+        it "forbids editing another institution's group" do
           login_as_super_admin_user
           get edit_group_url(non_member_group)
-          expect(response).to be_successful
+          expect(response).to have_http_status(:forbidden)
         end
       end
     end
@@ -249,6 +249,16 @@ RSpec.describe "/groups", type: :request do
   end
 
   describe "POST /create" do
+    context "when a technical super admin attempts to create an institutional group" do
+      it "returns forbidden without creating a group" do
+        login_as_super_admin_user
+        expect {
+          post groups_url, params: { group: valid_attributes }
+        }.not_to change(Group, :count)
+        expect(response).to have_http_status(:forbidden)
+      end
+    end
+
     context "with valid parameters" do
       it "creates a new Group" do
         expect {
@@ -362,11 +372,11 @@ RSpec.describe "/groups", type: :request do
         expect(response).to have_http_status(:forbidden)
       end
 
-      context "when logged in as a super admin" do
-        it "is allowed" do
+      context "when logged in as a technical super admin" do
+        it "forbids updating another institution's group" do
           login_as_super_admin_user
           patch group_url(non_member_group), params: { group: valid_attributes }
-          expect(response).to be_redirect
+          expect(response).to have_http_status(:forbidden)
         end
       end
     end
@@ -416,9 +426,11 @@ RSpec.describe "/groups", type: :request do
           login_as_super_admin_user
         end
 
-        it "moves the group to the other organisation" do
+        it "cannot move another institution's group" do
+          original_organisation_id = member_group.organisation_id
           patch group_url(member_group), params: { group: { organisation_id: other_organisation.id } }
-          expect(member_group.reload.organisation_id).to eq(other_organisation.id)
+          expect(response).to have_http_status(:forbidden)
+          expect(member_group.reload.organisation_id).to eq(original_organisation_id)
         end
       end
     end
@@ -435,15 +447,15 @@ RSpec.describe "/groups", type: :request do
       end
     end
 
-    context "when user is a super admin" do
+    context "when user is a technical super admin" do
       before do
         login_as_super_admin_user
       end
 
-      it "is allowed" do
+      it "forbids moving an institution's group" do
         get move_group_path(group)
 
-        expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
@@ -546,18 +558,11 @@ RSpec.describe "/groups", type: :request do
   describe "GET /delete" do
     let!(:group) { create :group, organisation: test_org }
 
-    context "when user is a super admin" do
-      before do
+    context "when user is a technical super admin" do
+      it "forbids deleting a group owned by an institution" do
         login_as_super_admin_user
         get delete_group_url(group)
-      end
-
-      it "returns a successful response" do
-        expect(response).to have_http_status(:ok)
-      end
-
-      it "renders a view to confirm delete" do
-        expect(response).to render_template(:delete)
+        expect(response).to have_http_status(:forbidden)
       end
     end
 
@@ -600,91 +605,13 @@ RSpec.describe "/groups", type: :request do
   describe "DELETE /destroy" do
     let!(:group) { create :group, name: "Test Group", organisation: test_org }
 
-    context "when user is a super admin" do
-      before do
+    context "when user is a technical super admin" do
+      it "forbids deleting an institution's group, even when confirmed" do
         login_as_super_admin_user
-      end
-
-      context "when user confirms they want to delete the group" do
-        let(:params) { { groups_delete_confirmation_input: { confirm: "yes" } } }
-
-        it "deletes the group" do
-          expect {
-            delete(group_url(group), params:)
-          }.to change(Group, :count).by(-1)
-        end
-
-        it "redirects to the list of groups" do
-          delete(group_url(group), params:)
-          expect(response).to have_http_status(:see_other)
-          expect(response).to redirect_to(groups_path)
-        end
-
-        it "displays a success flash message" do
-          delete(group_url(group), params:)
-          expect(flash[:success]).to eq "The group, ‘Test Group’, has been deleted"
-        end
-
-        context "but group has forms in it" do
-          before do
-            GroupForm.create! group:, form: create(:form)
-            GroupForm.create! group:, form: create(:form)
-          end
-
-          it "does not delete the group" do
-            expect {
-              delete(group_url(group), params:)
-            }.not_to change(Group, :count)
-          end
-
-          it "returns an error" do
-            delete(group_url(group), params:)
-            expect(response).to have_http_status(:unprocessable_content)
-          end
-
-          it "re-renders the confirm delete view with an error" do
-            delete(group_url(group), params:)
-            expect(response).to render_template(:delete)
-            expect(response.body).to include "This group cannot be deleted because it has forms in it"
-          end
-        end
-      end
-
-      context "when user confirms that they do not want to delete the group" do
-        let(:params) { { groups_delete_confirmation_input: { confirm: "no" } } }
-
-        it "does not delete the group" do
-          expect {
-            delete(group_url(group), params:)
-          }.not_to change(Group, :count)
-        end
-
-        it "redirects to the list of groups" do
-          delete(group_url(group), params:)
-          expect(response).to have_http_status(:see_other)
-          expect(response).to redirect_to(groups_path)
-        end
-      end
-
-      context "when user does not confirm whether they want to delete the group or not" do
-        let(:params) { { groups_delete_confirmation_input: { confirm: nil } } }
-
-        it "does not delete the group" do
-          expect {
-            delete(group_url(group), params:)
-          }.not_to change(Group, :count)
-        end
-
-        it "returns an error" do
-          delete(group_url(group), params:)
-          expect(response).to have_http_status(:unprocessable_content)
-        end
-
-        it "re-renders the confirm delete view with an error" do
-          delete(group_url(group), params:)
-          expect(response).to render_template(:delete)
-          expect(response.body).to include "Select ‘Yes’ to delete the group"
-        end
+        expect {
+          delete group_url(group), params: { groups_delete_confirmation_input: { confirm: "yes" } }
+        }.not_to change(Group, :count)
+        expect(response).to have_http_status(:forbidden)
       end
     end
 

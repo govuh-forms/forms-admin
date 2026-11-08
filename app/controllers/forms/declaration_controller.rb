@@ -1,13 +1,13 @@
 module Forms
   class DeclarationController < FormsController
     def new
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
       @declaration_input = DeclarationInput.new(form: current_form).assign_form_values
       @preview_html = preview_html(@declaration_input)
     end
 
     def create
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
       @declaration_input = DeclarationInput.new(**declaration_input_params)
       @preview_html = preview_html(@declaration_input)
 
@@ -34,7 +34,7 @@ module Forms
     end
 
     def render_preview
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
       @declaration_input = DeclarationInput.new(declaration_markdown: params[:markdown])
       @declaration_input.validate
 

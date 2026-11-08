@@ -1,10 +1,12 @@
 class MembershipPolicy < ApplicationPolicy
+  # Platform super administrators cannot grant themselves issuing authority
+  # by promoting group memberships or removing an institution's publisher.
   def destroy?
-    user.super_admin? || organisation_admin? || (group_admin? && record.editor?)
+    organisation_admin? || (group_admin? && record.editor?)
   end
 
   def update?
-    user.super_admin? || organisation_admin?
+    organisation_admin?
   end
 
 private

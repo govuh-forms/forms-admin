@@ -63,6 +63,28 @@ describe FormPolicy do
     end
   end
 
+  describe "#can_edit_form?" do
+    context "when a technical super administrator has no institution membership" do
+      let(:user) { build :super_admin_user, organisation: }
+
+      it { is_expected.to forbid_actions(%i[can_edit_form copy delete]) }
+      it { is_expected.to permit_action(:can_view_form) }
+    end
+
+    context "when an editor belongs to another organisation" do
+      let(:other_organisation) { build :organisation, id: 2, slug: "other" }
+      let(:user) { build :organisation_admin_user, organisation: other_organisation }
+
+      it { is_expected.to forbid_actions(%i[can_edit_form copy delete]) }
+    end
+
+    context "when a group editor belongs to the owning group" do
+      before { Membership.create!(user:, group:, added_by: user, role: :editor) }
+
+      it { is_expected.to permit_action(:can_edit_form) }
+    end
+  end
+
   describe "#can_make_form_live?" do
     context "with the groups feature enabled" do
       let(:group_role) { :editor }
@@ -80,8 +102,15 @@ describe FormPolicy do
       context "and the group status is active" do
         let(:group_status) { :active }
 
-        context "and the user's role is super admin" do
+        context "and a technical super administrator has only editor membership" do
           let(:user) { build :super_admin_user, organisation: }
+
+          it { is_expected.to forbid_action(:can_make_form_live) }
+        end
+
+        context "and a technical administrator has been appointed group administrator" do
+          let(:user) { build :super_admin_user, organisation: }
+          let(:group_role) { :group_admin }
 
           it { is_expected.to permit_action(:can_make_form_live) }
         end
@@ -122,10 +151,10 @@ describe FormPolicy do
       context "and the group status is active" do
         let(:group_status) { :active }
 
-        context "and the user's role is super admin" do
+        context "and a technical super administrator has only editor membership" do
           let(:user) { build :super_admin_user, organisation: }
 
-          it { is_expected.to permit_action(:can_make_language_live) }
+          it { is_expected.to forbid_action(:can_make_language_live) }
         end
 
         context "and the user is organisation admin for the group" do
@@ -183,10 +212,10 @@ describe FormPolicy do
       Membership.create!(user:, group:, added_by: user, role: group_role)
     end
 
-    context "when the user is a super admin" do
+    context "when the user is a technical super admin but only an editor" do
       let(:user) { build :super_admin_user, organisation: }
 
-      it { is_expected.to permit_action(:can_administer_group) }
+      it { is_expected.to forbid_action(:can_administer_group) }
     end
 
     context "when the user is an organisation admin" do

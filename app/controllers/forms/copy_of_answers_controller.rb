@@ -19,7 +19,7 @@ module Forms
   private
 
     def check_user_has_permission
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
     end
 
     def copy_of_answers_input_params

@@ -1,12 +1,12 @@
 module Forms
   class PrivacyPolicyController < FormsController
     def new
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
       @privacy_policy_input = PrivacyPolicyInput.new(form: current_form).assign_form_values
     end
 
     def create
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
       @privacy_policy_input = PrivacyPolicyInput.new(privacy_policy_input_params)
 
       if @privacy_policy_input.submit

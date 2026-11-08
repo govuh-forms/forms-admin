@@ -229,10 +229,11 @@ RSpec.describe UsersController, type: :request do
         login_as_super_admin_user
       end
 
-      it "redirects to /users page and updates user" do
+      it "forbids setting another account's technical role" do
+        original_role = user.role
         put user_path(user), params: { user: { role: } }
-        expect(response).to redirect_to(users_path)
-        expect(user.reload.super_admin?).to be true
+        expect(response).to have_http_status(:forbidden)
+        expect(user.reload.role).to eq(original_role)
       end
 
       it "can update the user's name" do
@@ -240,9 +241,23 @@ RSpec.describe UsersController, type: :request do
         expect(user.reload.name).to eq "Fakey McFakeName"
       end
 
-      it "can update whether user has access" do
+      it "does not allow a technical administrator to change their own role" do
+        original_role = super_admin_user.role
+        patch user_path(super_admin_user), params: { user: { role: "organisation_admin", organisation_id: test_org.id } }
+        expect(response).to have_http_status(:forbidden)
+        expect(super_admin_user.reload.role).to eq(original_role)
+      end
+
+      it "does not allow a technical administrator to edit their own access" do
+        patch user_path(super_admin_user), params: { user: { has_access: false } }
+        expect(response).to have_http_status(:forbidden)
+        expect(super_admin_user.reload.has_access).to be true
+      end
+
+      it "forbids changing another account's P0-managed access" do
         patch user_path(user), params: { user: { has_access: false } }
-        expect(user.reload.has_access).to be false
+        expect(response).to have_http_status(:forbidden)
+        expect(user.reload.has_access).to be true
       end
 
       it "when given a user which doesn't exist returns 404" do
@@ -250,10 +265,9 @@ RSpec.describe UsersController, type: :request do
         expect(response).to have_http_status(:not_found)
       end
 
-      it "does not update user if role is invalid" do
+      it "forbids even invalid role change before reaching the updater" do
         put user_path(user), params: { user: { role: nil } }
-        expect(response).to have_http_status(:unprocessable_content)
-        expect(response.body).to include "Select a role for the user"
+        expect(response).to have_http_status(:forbidden)
         expect(user.reload.role).not_to be_nil
       end
 
@@ -267,10 +281,9 @@ RSpec.describe UsersController, type: :request do
       end
 
       context "when user belongs to an organistion" do
-        it "does not update user if organisation is not chosen" do
+        it "forbids changing the organisation via technical support" do
           put user_path(user), params: { user: { organisation_id: nil } }
-          expect(response).to have_http_status(:unprocessable_content)
-          expect(response.body).to include "Select the user’s organisation"
+          expect(response).to have_http_status(:forbidden)
           expect(user.reload.organisation).not_to be_nil
         end
       end
@@ -288,15 +301,15 @@ RSpec.describe UsersController, type: :request do
       context "with a user with no organisation set" do
         let(:user) { create(:user, organisation_id: nil) }
 
-        it "does not return error if organisation is not chosen and role is not changed" do
+        it "denies an organisation field write even if its value is nil" do
           put user_path(user), params: { user: { organisation_id: nil } }
-          expect(response).to redirect_to(users_path)
+          expect(response).to have_http_status(:forbidden)
           expect(user.reload.organisation).to be_nil
         end
 
-        it "returns an error if organisation is not chosen and role is changed to organisation_admin" do
+        it "denies promotion to institutional administrator" do
           put user_path(user), params: { user: { role: "organisation_admin", organisation_id: nil } }
-          expect(response).to have_http_status(:unprocessable_content)
+          expect(response).to have_http_status(:forbidden)
           expect(user.reload.role).to eq("standard")
         end
       end
@@ -308,9 +321,9 @@ RSpec.describe UsersController, type: :request do
         context "with a user #{title}" do
           let(:user) { create(:user, trait) }
 
-          it "does not return error if organisation is not chosen" do
+          it "denies all institutional identity changes by technical support" do
             put user_path(user), params: { user: { organisation_id: nil } }
-            expect(response).to redirect_to(users_path)
+            expect(response).to have_http_status(:forbidden)
             expect(user.reload.organisation).to be_nil
           end
         end
@@ -326,27 +339,14 @@ RSpec.describe UsersController, type: :request do
     end
 
     context "when changing role" do
-      before do
-        login_as_super_admin_user
-      end
+      before { login_as_super_admin_user }
 
-      it "calls UserUpdateService" do
-        user = create(:user)
-        user_update_service = instance_spy(UserUpdateService)
-
-        allow(UserUpdateService)
-          .to receive(:new)
-                .with(user, ActionController::Parameters.new(role: "organisation_admin").permit(:role))
-                .and_return(user_update_service)
-
-        patch user_path(user), params: { user: { role: "organisation_admin" } }
-
-        expect(UserUpdateService)
-          .to have_received(:new)
-                .with(user, ActionController::Parameters.new(role: "organisation_admin").permit(:role))
-
-        expect(user_update_service)
-          .to have_received(:update_user)
+      it "does not invoke UserUpdateService on unauthorised role changes" do
+        target = create(:user)
+        expect(UserUpdateService).not_to receive(:new)
+        patch user_path(target), params: { user: { role: "organisation_admin" } }
+        expect(response).to have_http_status(:forbidden)
+        expect(target.reload.role).to eq("standard")
       end
     end
   end

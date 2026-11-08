@@ -1,12 +1,12 @@
 module Forms
   class ContactDetailsController < FormsController
     def new
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
       @contact_details_input = ContactDetailsInput.new(form: current_form).assign_form_values
     end
 
     def create
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
       @contact_details_input = ContactDetailsInput.new(**contact_details_input_params)
 
       if @contact_details_input.submit

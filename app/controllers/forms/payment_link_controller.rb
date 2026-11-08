@@ -3,12 +3,12 @@ module Forms
     before_action :require_payment_links_feature
 
     def new
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
       @payment_link_input = PaymentLinkInput.new(form: current_form).assign_form_values
     end
 
     def create
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
       @payment_link_input = PaymentLinkInput.new(payment_link_input_params)
       previous_payment_url = current_form.payment_url
 

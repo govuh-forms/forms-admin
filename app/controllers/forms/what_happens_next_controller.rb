@@ -1,14 +1,14 @@
 module Forms
   class WhatHappensNextController < FormsController
     def new
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
       @what_happens_next_input = WhatHappensNextInput.new(form: current_form).assign_form_values
       @preview_html = preview_html(@what_happens_next_input)
       render :new, locals: { current_form: }
     end
 
     def create
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
       @what_happens_next_input = WhatHappensNextInput.new(**what_happens_next_input_params)
       @preview_html = preview_html(@what_happens_next_input)
 
@@ -29,7 +29,7 @@ module Forms
     end
 
     def render_preview
-      authorize current_form, :can_view_form?
+      authorize current_form, :can_edit_form?
       @what_happens_next_input = WhatHappensNextInput.new(what_happens_next_markdown: params[:markdown])
       @what_happens_next_input.validate
 

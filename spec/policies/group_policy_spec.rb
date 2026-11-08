@@ -9,10 +9,10 @@ RSpec.describe GroupPolicy do
   context "when user is super_admin" do
     let(:user) { build :super_admin_user }
 
-    it { is_expected.to permit_actions(%i[delete destroy]) }
+    it { is_expected.to forbid_actions(%i[new create edit update add_editor move delete destroy]) }
 
-    it "forbids only request_upgrade and review_upgrade" do
-      expect(policy).to forbid_only_actions(%i[request_upgrade review_upgrade])
+    it "forbids activation, approval and appointment of an issuing group administrator" do
+      expect(policy).to forbid_actions(%i[upgrade add_group_admin review_upgrade])
     end
 
     it "scope resolves to all groups" do
@@ -26,8 +26,8 @@ RSpec.describe GroupPolicy do
     context "when the group has status upgrade_requested" do
       let(:group) { build :group, status: :upgrade_requested }
 
-      it "permits review_upgrade" do
-        expect(policy).to permit_action(:review_upgrade)
+      it "cannot approve an issuing group" do
+        expect(policy).to forbid_action(:review_upgrade)
       end
     end
 
