@@ -140,4 +140,10 @@ describe FormMetricsCsvService do
       end
     end
   end
+  describe ".compute_completion_rate" do
+    it "uses floating-point arithmetic for fractional completion rates" do
+      expect(described_class.compute_completion_rate(3, 2)).to eq("66.7")
+    end
+  end
+
 end
