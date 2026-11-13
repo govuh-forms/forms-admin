@@ -1,5 +1,7 @@
 <% set_page_title(t("page_titles.sign_in")) %>
 
+<h1 class="govuk-heading-l"><%= t("page_titles.sign_in") %></h1>
+
 <%= sign_in_button(is_e2e_user: @is_e2e_user) %>
 
 <%= render partial: "authentications/auto_click_login_js" %>
