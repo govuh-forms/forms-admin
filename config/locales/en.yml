@@ -587,7 +587,7 @@ en:
         en: English form URL
       make_a_copy: Make a copy of this form
       make_this_form_live: Make this form live
-      payment_link: GOV.UK Pay payment link
+      payment_link: a payment service payment link
       preview:
         cy: Preview this form in Welsh
         en: Preview this form in English
@@ -628,7 +628,7 @@ en:
       create_form_optional_subsection:
         brand: Choose a brand for your form
         copy_of_answers: Give people the option to ask for a copy of their answers
-        payment_link: Add a link to a payment page on GOV.UK Pay
+        payment_link: Add a link to a payment page on a payment service
       create_form_section:
         declaration: Add a declaration for people to agree to
         name: Edit the name of your form
@@ -677,7 +677,7 @@ en:
       create_form_optional_subsection:
         brand: Choose a brand for your form
         copy_of_answers: Give people the option to ask for a copy of their answers
-        payment_link: Add a link to a payment page on GOV.UK Pay
+        payment_link: Add a link to a payment page on a payment service
       create_form_section:
         declaration: Edit the declaration for people to agree to
         name: Edit the name of your form
@@ -744,7 +744,7 @@ en:
           declaration: Declaration for people to agree to
           form_name: Form name
           pages: Form questions
-          payment_link: GOV.UK Pay payment link
+          payment_link: a payment service payment link
           privacy_information: Link to privacy information for this form
           selection_options: Question %{question_number}’s list of options
           support_information: Contact details for support
@@ -1835,7 +1835,7 @@ en:
     non_crown_agreement_new: GOV.UH Forms agreement
     not_found: Page not found
     organisations: Organisations
-    payment_link: Add a link to a payment page on GOV.UK Pay
+    payment_link: Add a link to a payment page on a payment service
     privacy_policy: Provide a link to privacy information for this form
     question_text: What’s your question?
     routes: Edit question routes
@@ -2001,59 +2001,26 @@ en:
     submit_save: Save question
   payment_link_input:
     body_html: |
-      <p>You can use <a href="https://payments.service.gov.uk/" target="_blank"" rel="noreferrer noopener"">GOV.UK Pay (opens in a new tab)</a> to set up a payment page (called a ‘payment link’).</p>
-
-      <p>Once it’s set up, you can copy and paste the payment link URL into the box below. This will add a payment page to the end of your form.</p>
+      <p>GOV.UH Forms does not currently have a configured payment provider. Contact your organisation’s finance team before adding any payment arrangements to a form.</p>
+      <p>A payment link must not be published until your organisation has approved the service, checked the receiving account and confirmed how form references will be reconciled with payments.</p>
     creating_your_payment_link:
-      body_html: Once you have a GOV.UK Pay account you can start creating your payment link by selecting <strong>Add a new service</strong>.
-      heading: Creating your payment link in GOV.UK Pay
-    heading: Add a link to a payment page on GOV.UK Pay
+      body_html: Contact your organisation’s finance team to arrange an approved payment link.
+      heading: Creating a payment link
+    heading: Add a link to an approved payment service
     how_this_will_help_processors:
-      body_html: |
-        <p>The form reference number will be included in the form submission email sent to your processing email address.</p>
-
-        <p>This can help match up form submissions with payments in GOV.UK Pay.</p>
-
-        <p><a href="https://www.payments.service.gov.uk/govuk-payment-pages/" target="_blank" rel="noreferrer noopener">Find out more about creating a GOV.UK Pay payment link (opens in a new tab)</a></p>
-      heading: How this will help people processing your forms
+      body_html: Form submission references can help your organisation reconcile payments with the associated forms.
+      heading: How this helps people processing forms
     how_this_will_work:
       body_html: |
-        <p>Once someone’s submitted their form they’ll see a confirmation page showing:</p>
-
-        <ul class="govuk-list govuk-list--bullet">
-          <li>a blue banner saying ‘You still need to pay’</li>
-          <li>their form’s unique reference number</li>
-          <li>the ‘what happens next’ information you’ve added</li>
-          <li>a green ‘Continue to pay’ button - this will take them to GOV.UK Pay to make their payment</li>
-        </ul>
-
-        <p>The reference number, payment link and ‘what happens next’ information will also be included in a confirmation email for form fillers - if they choose to receive this.</p>
-      heading: How this will work for people filling in your form
+        <p>If a payment service has been approved and configured, the person completing the form will receive a payment link after submitting their form.</p>
+        <p>Do not rely on this step to collect a payment until the service and its receiving account have been tested.</p>
+      heading: How payment links work
     set_up_your_payment_link:
-      body_html: |
-        <p>GOV.UH Forms adds a unique 8-character reference to each form submission.</p>
-
-        <p>When creating a payment link in GOV.UK Pay, you’ll be asked ‘Do your users already have a payment reference?’</p>
-
-        <p>Select <strong>Yes</strong>.</p>
-
-        <p>This means the form reference number will automatically be sent through to GOV.UK Pay when someone makes a payment.</p>
-
-        <p>When asked to fill in the <strong>Name of payment reference</strong> field, enter ‘Form reference number’.</p>
-      heading: Set up your payment link to use a form’s unique reference number
+      body_html: Agree the payment reference and reconciliation arrangements with your organisation’s finance team.
+      heading: Set up your payment reference
     setting_up_govuk_pay:
-      body_html: |
-        <p>You’ll need to set up a GOV.UK Pay account if you do not already have one.</p>
-
-        <p>You’ll also need to talk to your organisation’s finance team to:</p>
-
-        <ul class="govuk-list govuk-list--bullet">
-          <li>make sure you’re allowed to take payments in this way</li>
-          <li>set up a payment service provider (PSP)</li>
-        </ul>
-
-        <p class="govuk-inset-text">It could be up to several months before you’re ready to take payments. This depends on the PSP arrangements for your organisation.</p>
-      heading: Setting up GOV.UK Pay
+      body_html: GOV.UH Forms does not currently have a configured payment provider. Ask your organisation’s finance team about approved arrangements.
+      heading: Arranging a payment service
     submit_button: Save and continue
   phase_banner:
     text: This is a new service.

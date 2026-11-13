@@ -7,4 +7,4 @@ en:
           attributes:
             domain:
               blank: Enter a domain name
-              invalid_domain: Enter a domain name in the correct format, like subdomain.gov.uk
+              invalid_domain: Enter a domain name in the correct format, like department.gov.uhrblx.com

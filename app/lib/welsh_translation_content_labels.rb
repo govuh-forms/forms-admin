@@ -3,7 +3,7 @@ module WelshTranslationContentLabels
     name: "Form name",
     declaration_markdown: "Declaration",
     what_happens_next_markdown: "Information about what happens next",
-    payment_url: "GOV.UK Pay payment link",
+    payment_url: "payment service link",
     privacy_policy_url: "Link to privacy information for this form",
     support_email: "Contact details for support - email address",
     support_phone: "Contact details for support - phone number and opening times",

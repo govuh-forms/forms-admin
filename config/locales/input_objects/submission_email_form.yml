@@ -10,7 +10,7 @@ en:
               invalid_email_code: The code should be 6 numbers - double check the code or set the email address again to send a new one
             temporary_submission_email:
               blank: Enter an email address
-              invalid_email: Enter an email address in the correct format, like name@example.gov.uk
+              invalid_email: Enter an email address in the correct format, like name@example.org
   helpers:
     label:
       forms_submission_email_input:
