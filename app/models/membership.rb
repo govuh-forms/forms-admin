@@ -13,13 +13,15 @@ class Membership < ApplicationRecord
   validates :role, presence: true
 
   def self.destroy_invalid_organisation_memberships(user)
+    return if user.super_admin?
+
     Membership.joins(:group).where(user:).where.not(groups: { organisation_id: user.organisation_id }).destroy_all
   end
 
 private
 
   def user_and_group_in_same_organisation
-    return if user.nil? || group.nil?
+    return if user.nil? || group.nil? || user.super_admin?
     return if user.organisation == group.organisation
 
     errors.add(:base, :user_in_other_org, message: "User and group must have the same organisation")
