@@ -4,7 +4,7 @@ module MetricsSummaryComponent
   class View < ApplicationComponent
     attr_reader :form_id, :start_date, :end_date, :weekly_submissions, :weekly_starts,
                 :weekly_started_but_not_completed, :weekly_completion_rate, :form_has_metrics, :error_message, :heading,
-                :show_csv_link
+                :show_csv_link, :submissions_only
 
     def initialize(form_id:, form_live_date:, metrics_data:)
       super()
@@ -13,7 +13,7 @@ module MetricsSummaryComponent
       @end_date = 1.day.ago.to_date
       @heading = heading_text.html_safe
 
-      @show_csv_link = !metrics_data.nil? && !form_went_live_today?
+      @show_csv_link = !metrics_data.nil? && !metrics_data[:weekly_starts].nil? && !form_went_live_today?
 
       if metrics_data.nil?
         @error_message = if CloudWatchService.available?
@@ -21,6 +21,9 @@ module MetricsSummaryComponent
         else
           I18n.t("metrics_summary.errors.not_configured_html")
         end
+      elsif metrics_data[:weekly_starts].nil?
+        @submissions_only = true
+        @weekly_submissions = metrics_data[:weekly_submissions].to_i
       elsif form_went_live_today?
         @error_message = I18n.t("metrics_summary.errors.new_form_html")
       elsif metrics_data[:weekly_starts].zero?
