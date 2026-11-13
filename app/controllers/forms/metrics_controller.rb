@@ -4,6 +4,9 @@ module Forms
 
     def metrics_csv
       authorize current_form, :can_view_form?
+      unless CloudWatchService.available?
+        return render plain: "Form usage statistics are not available because reporting is not connected.", status: :service_unavailable
+      end
 
       csv_data = FormMetricsCsvService.csv(
         form_id: current_form.id,

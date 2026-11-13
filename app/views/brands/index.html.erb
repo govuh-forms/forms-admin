@@ -1,6 +1,11 @@
 <% set_page_title(t("page_titles.brands")) %>
 
 <h1 class="govuk-heading-l"><%= t("page_titles.brands") %></h1>
+<p class="govuk-body">
+  Brands are optional visual identities for forms, including their logo,
+  colours, favicon and copyright information. Forms can use the standard
+  GOV.UH identity without a separate brand.
+</p>
 
 <% if @brands.any? %>
   <%= render ScrollingWrapperComponent::View.new(aria_label: t("brands.index.table_caption")) do %>

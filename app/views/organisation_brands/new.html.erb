@@ -14,6 +14,11 @@
         <%= t(".title") %>
       </h1>
 
+      <p class="govuk-body">
+        A brand sets the logo, colours and copyright details used on a form.
+        An organisation can use the standard GOV.UH form design without creating a separate brand.
+      </p>
+      <% if @brand_input.available_brands.exists? %>
       <%= render DfE::Autocomplete::View.new(
         f,
         attribute_name: :brand_id,
@@ -24,6 +29,14 @@
       ) %>
 
       <%= f.govuk_submit t(".submit") %>
+      <% else %>
+        <p class="govuk-inset-text">
+          There are no additional brands available for this organisation.
+        </p>
+        <% if policy(Brand).can_edit_brands? %>
+          <p class="govuk-body"><%= govuk_link_to "Create a brand", new_brand_path %></p>
+        <% end %>
+      <% end %>
     <% end %>
   </div>
 </div>

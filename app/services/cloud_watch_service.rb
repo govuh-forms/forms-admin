@@ -6,12 +6,17 @@ class CloudWatchService
   OLD_METRICS_NAMESPACE = "forms/#{Settings.forms_env}".downcase.freeze
   NAMESPACE_CHANGE_DATE = Time.utc(2025, 3, 14).freeze
 
+  def self.available?
+    Settings.cloudwatch_metrics_enabled &&
+      Aws::CloudWatch::Client.new(region: REGION).config.credentials.present?
+  end
+
   def initialize(form_id)
     @form_id = form_id
   end
 
   def past_week_metrics_data
-    return nil unless Settings.cloudwatch_metrics_enabled
+    return nil unless self.class.available?
 
     weekly_submissions = week_submissions
     weekly_starts = week_starts
