@@ -14,12 +14,12 @@ en:
               blank: Enter a Welsh form name
               too_long: The form name cannot be longer than %{count} characters
             payment_url_cy:
-              blank: Enter a Welsh GOV.UK Pay payment link
-              url: Enter a GOV.UK Pay payment link in the correct format, like https://www.gov.uk/payments/your-payment-link
+              blank: Enter a payment link in Welsh
+              url: Enter a payment link in the correct format, like https://example.org/payments/your-payment-link
             privacy_policy_url_cy:
               blank: Enter a link to privacy information in Welsh
-              exclusion: https://www.gov.uk/help/privacy-notice is the privacy notice for the GOV.UK website and cannot be used for your form
-              url: Enter a link to Welsh privacy information in the correct format, like https://www.gov.uk/help/privacy-notice
+              exclusion: Use the privacy notice for this form, not a general website privacy notice
+              url: Enter a link to Welsh privacy information in the correct format, like https://example.org/privacy
             support_email_cy:
               blank: Enter an email address for support
               invalid_email_address: Enter an email address for support in the correct format, like name@example.com
@@ -30,7 +30,7 @@ en:
             support_url_cy:
               blank: Enter an online contact link for Welsh support
               too_long: The link for support cannot be longer than 120 characters
-              url: Enter a link for support in the correct format, like https://www.gov.uk/contact
+              url: Enter a link for support in the correct format, like https://example.org/contact
             support_url_text_cy:
               blank: Enter text to describe the contact link for Welsh support
               too_long: The text to describe the contact link for support cannot be longer than 120 characters
@@ -49,12 +49,12 @@ en:
               blank: Enter a Welsh form name
               too_long: The form name cannot be longer than %{count} characters
             payment_url_cy:
-              blank: Enter a Welsh GOV.UK Pay payment link
-              url: Enter a GOV.UK Pay payment link in the correct format, like https://www.gov.uk/payments/your-payment-link
+              blank: Enter a payment link in Welsh
+              url: Enter a payment link in the correct format, like https://example.org/payments/your-payment-link
             privacy_policy_url_cy:
               blank: Enter a link to privacy information in Welsh
-              exclusion: https://www.gov.uk/help/privacy-notice is the privacy notice for the GOV.UK website and cannot be used for your form
-              url: Enter a link to Welsh privacy information in the correct format, like https://www.gov.uk/help/privacy-notice
+              exclusion: Use the privacy notice for this form, not a general website privacy notice
+              url: Enter a link to Welsh privacy information in the correct format, like https://example.org/privacy
             support_email_cy:
               blank: Enter an email address for support
               invalid_email_address: Enter an email address for support in the correct format, like name@example.com
@@ -65,7 +65,7 @@ en:
             support_url_cy:
               blank: Enter an online contact link for Welsh support
               too_long: The link for support cannot be longer than 120 characters
-              url: Enter a link for support in the correct format, like https://www.gov.uk/contact
+              url: Enter a link for support in the correct format, like https://example.org/contact
             support_url_text_cy:
               blank: Enter text to describe the contact link for Welsh support
               too_long: The text to describe the contact link for support cannot be longer than 120 characters
@@ -78,7 +78,7 @@ en:
       forms_welsh_translation_input:
         declaration_markdown_cy: Enter your Welsh declaration
         name_cy: Enter your Welsh form name
-        payment_url_cy: Enter Welsh GOV.UK Pay payment link
+        payment_url_cy: Enter the payment link in Welsh
         privacy_policy_url_cy: Enter link to your Welsh privacy information
         support_email_cy: Enter email address for Welsh support
         support_phone_cy: Enter phone information for Welsh support
@@ -88,7 +88,7 @@ en:
       forms_welsh_translation_input2:
         declaration_markdown_cy: Enter your Welsh declaration
         name_cy: Enter your Welsh form name
-        payment_url_cy: Enter Welsh GOV.UK Pay payment link
+        payment_url_cy: Enter the payment link in Welsh
         privacy_policy_url_cy: Enter link to your Welsh privacy information
         support_email_cy: Enter email address for Welsh support
         support_phone_cy: Enter phone information for Welsh support

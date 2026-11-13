@@ -13,7 +13,7 @@ en:
             link_href:
               blank: Enter an online contact link
               too_long: The link cannot be longer than 500 characters
-              url: Enter a link in the correct format, like https://www.gov.uk/contact
+              url: Enter a link in the correct format, like https://example.org/contact
             link_text:
               blank: Enter an online contact link description
               too_long: The link description cannot be longer than 120 characters
@@ -23,7 +23,7 @@ en:
   helpers:
     hint:
       forms_contact_details_input:
-        link_href: For example, https://gov.uk/contact-form
+        link_href: For example, https://example.org/contact
         link_text: For example, ‘Online contact form’
     label:
       forms_contact_details_input:
