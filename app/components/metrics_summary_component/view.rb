@@ -21,11 +21,11 @@ module MetricsSummaryComponent
         else
           I18n.t("metrics_summary.errors.not_configured_html")
         end
+      elsif form_went_live_today?
+        @error_message = I18n.t("metrics_summary.errors.new_form_html")
       elsif metrics_data[:weekly_starts].nil?
         @submissions_only = true
         @weekly_submissions = metrics_data[:weekly_submissions].to_i
-      elsif form_went_live_today?
-        @error_message = I18n.t("metrics_summary.errors.new_form_html")
       elsif metrics_data[:weekly_starts].zero?
         @error_message = I18n.t("metrics_summary.errors.no_submissions_html")
       else
