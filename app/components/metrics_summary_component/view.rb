@@ -16,7 +16,11 @@ module MetricsSummaryComponent
       @show_csv_link = !metrics_data.nil? && !form_went_live_today?
 
       if metrics_data.nil?
-        @error_message = I18n.t("metrics_summary.errors.error_loading_data_html")
+        @error_message = if CloudWatchService.available?
+          I18n.t("metrics_summary.errors.error_loading_data_html")
+        else
+          I18n.t("metrics_summary.errors.not_configured_html")
+        end
       elsif form_went_live_today?
         @error_message = I18n.t("metrics_summary.errors.new_form_html")
       elsif metrics_data[:weekly_starts].zero?
