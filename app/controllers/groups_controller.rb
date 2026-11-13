@@ -6,12 +6,20 @@ class GroupsController < WebController
   # GET /groups
   def index
     if @current_user.super_admin?
-      @search_input = OrganisationSearchInput.new({ organisation_id: @current_user.organisation_id }.merge(search_params))
-
-      @active_groups = policy_scope(Group).where(organisation_id: @search_input.organisation_id).active
-      @upgrade_requested_groups = policy_scope(Group).where(organisation_id: @search_input.organisation_id).upgrade_requested
-      @trial_groups = policy_scope(Group).where(organisation_id: @search_input.organisation_id).trial
-      @organisation = @search_input.organisation
+      @search_input = OrganisationSearchInput.new(search_params)
+      groups = policy_scope(Group)
+      if @search_input.organisation_id.present?
+        @organisation = @search_input.organisation
+        groups = groups.where(organisation_id: @search_input.organisation_id)
+      else
+        # A super administrator may be a member of groups in several organisations.
+        # Display their memberships by default, and retain the organisation filter.
+        @organisation = nil
+        groups = groups.for_user(@current_user)
+      end
+      @active_groups = groups.active
+      @upgrade_requested_groups = groups.upgrade_requested
+      @trial_groups = groups.trial
     else
       @active_groups = policy_scope(Group).active
       @upgrade_requested_groups = policy_scope(Group).upgrade_requested

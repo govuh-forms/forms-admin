@@ -34,6 +34,16 @@ RSpec.describe Membership, type: :model do
     expect(membership).not_to be_valid
   end
 
+  it "permits a super administrator to join a group in another organisation" do
+    org1 = create :organisation, slug: "test-org"
+    org2 = create :organisation, slug: "ministry-of-testing"
+    super_admin = create :user, organisation: org1, role: :super_admin
+    group = create :group, organisation: org2
+    membership = build(:membership, user: super_admin, group:)
+
+    expect(membership).to be_valid
+  end
+
   it "is invalid if the user is already a member of the group" do
     organisation = create :organisation
     user = create :user, organisation: organisation
@@ -73,6 +83,17 @@ RSpec.describe Membership, type: :model do
       user.organisation = org2
       described_class.destroy_invalid_organisation_memberships(user)
       expect(described_class.exists?(membership.id)).to be false
+    end
+
+    it "preserves a super administrator's cross-organisation memberships" do
+      org1 = create :organisation, slug: "test-org"
+      org2 = create :organisation, slug: "ministry-of-testing"
+      super_admin = create :user, organisation: org1, role: :super_admin
+      group = create :group, organisation: org2
+      membership = create(:membership, user: super_admin, group:)
+
+      described_class.destroy_invalid_organisation_memberships(super_admin)
+      expect(described_class.exists?(membership.id)).to be true
     end
 
     it "does not remove memberships for other users" do
