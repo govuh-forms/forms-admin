@@ -4,7 +4,7 @@ module Forms
 
     def metrics_csv
       authorize current_form, :can_view_form?
-      unless CloudWatchService.available?
+      unless CloudWatchService.available? || RunnerSubmissionMetricsService.full_report_available?
         return render plain: "Form usage statistics are not available because reporting is not connected.", status: :service_unavailable
       end
 
