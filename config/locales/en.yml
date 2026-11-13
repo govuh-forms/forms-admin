@@ -2387,6 +2387,7 @@ en:
     status: Status
   step_summary_card:
     answer_type: Answer type
+    answer_settings_missing: Answer settings are missing from this form version
     date_type:
       date_of_birth: Date of birth
       other_date: Date
