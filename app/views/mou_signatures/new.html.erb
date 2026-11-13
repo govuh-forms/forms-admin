@@ -8,6 +8,7 @@
       <%= f.govuk_error_summary %>
 
       <h1 class="govuk-heading-l"><%= page_title %></h1>
+      <p class="govuk-body">Organisation: <strong><%= @mou_signature.organisation.name %></strong></p>
 
       <% if @agreement_type == :crown %>
         <%= render "mou_version_current" %>
@@ -19,7 +20,10 @@
         <%= f.govuk_check_box :agreed, 1, 0, multiple: false, link_errors: true, label: { text: t("helpers.label.mou_signature.#{@agreement_type}_agreed") } %>
       <% end %>
 
-      <%= f.govuk_submit t('save_and_continue') %>
+      <p class="govuk-body-s">Accepted edition: 20 October 2026. Your name, account, organisation, stated capacity, acceptance and the exact edition are recorded.</p>
+      <%= f.govuk_text_field :signatory_capacity, label: { text: "Your official capacity or authority to accept for this organisation" }, hint: { text: "For example, an appointment or delegation recorded by your organisation" } %>
+      <%= f.govuk_check_box :authority_confirmed, "1", "0", multiple: false, label: { text: "I confirm that I have authority to accept this agreement on behalf of my organisation" } %>
+      <%= f.govuk_submit "Accept memorandum for my organisation" %>
     <% end %>
   </div>
 </div>

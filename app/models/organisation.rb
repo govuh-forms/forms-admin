@@ -34,13 +34,13 @@ class Organisation < ApplicationRecord
   scope :by_agreement_type, lambda { |agreement_type|
     case agreement_type
     when "crown"
-      where(id: MouSignature.crown.select(:organisation_id))
+      where(id: MouSignature.crown.where(accepted_document_version: MouSignature::CURRENT_CROWN_EDITION).select(:organisation_id))
     when "non_crown"
-      where(id: MouSignature.non_crown.select(:organisation_id))
+      where(id: MouSignature.non_crown.where.not(accepted_document_version: nil).select(:organisation_id))
     when "signed"
-      where(id: MouSignature.select(:organisation_id))
+      where(id: MouSignature.where(accepted_document_version: MouSignature::CURRENT_CROWN_EDITION).select(:organisation_id))
     when "none"
-      where.missing(:mou_signatures)
+      where.not(id: MouSignature.where(accepted_document_version: MouSignature::CURRENT_CROWN_EDITION).select(:organisation_id))
     end
   }
 

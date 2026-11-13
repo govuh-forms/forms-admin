@@ -65,6 +65,15 @@
 
     <% if Settings.features.organisation_agreement.enabled %>
     <h2 class="govuk-heading-m"><%= t("organisations.show.mou_signatures.heading") %></h2>
+    <% current_acceptance = @organisation.mou_signatures.any? { |m| m.accepted_document_version == MouSignature::CURRENT_CROWN_EDITION } %>
+    <% if current_acceptance %>
+      <p class="govuk-body">The current GOV.UH Forms Crown memorandum has been accepted for this organisation.</p>
+    <% else %>
+      <p class="govuk-inset-text">No acceptance of the current GOV.UH Forms Crown memorandum is recorded for this organisation. Historical records do not establish acceptance of the current edition.</p>
+      <% if @current_user.organisation_admin? && @current_user.organisation_id == @organisation.id %>
+        <p class="govuk-body"><%= govuk_link_to "Review and accept the current Crown memorandum", new_mou_signature_path %></p>
+      <% end %>
+    <% end %>
     <% if @organisation.mou_signatures.any? %>
       <%= render ScrollingWrapperComponent::View.new(aria_label: t("organisations.show.mou_signatures.heading")) do |table| %>
         <%= govuk_table do |table| %>
@@ -73,6 +82,7 @@
               row.with_cell(header: true, text: t("organisations.show.mou_signatures.table_headings.agreement_type"))
               row.with_cell(header: true, text: t("organisations.show.mou_signatures.table_headings.name"))
               row.with_cell(header: true, text: t("organisations.show.mou_signatures.table_headings.email"))
+              row.with_cell(header: true, text: "Edition")
               row.with_cell(header: true, text: t("organisations.show.mou_signatures.table_headings.agreed_at"))
             end
           end %>
@@ -85,6 +95,7 @@
                 row.with_cell do
                   govuk_link_to(mou_signature.user.email, edit_user_path(mou_signature.user))
                 end
+                row.with_cell(text: mou_signature.accepted_document_version.presence || "Historical — edition not recorded")
                 row.with_cell(text: l(mou_signature.created_at.to_date, format: :long))
               end
             end
@@ -98,7 +109,8 @@
 
       <%= t("organisations.show.mou_signatures.share_mou_link_html", mou_link: link_to(mou_signature_url, mou_signature_url)) %>
 
-      <%= t("organisations.show.mou_signatures.share_non_crown_agreement_link_html", agreement_link: link_to(non_crown_agreement_signature_url, non_crown_agreement_signature_url)) %>
+      <p class="govuk-body">An agreement must be accepted by a representative authorised by the participating organisation. Group administrator access or platform super-administrator status alone does not confer that authority.</p>
+      <p class="govuk-body"><%= govuk_link_to "Read the status of non-Crown participation terms", new_non_crown_agreement_signature_path %></p>
     <% end %>
 
     <% end %>

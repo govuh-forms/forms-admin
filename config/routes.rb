@@ -260,7 +260,7 @@ Rails.application.routes.draw do
       get "/signed", to: "mou_signatures#confirmation", as: :confirmation
     end
 
-    resource :mou_signature, only: %i[new show create], path: "/govuk-forms-agreement", defaults: { agreement_type: :non_crown }, as: :non_crown_agreement_signature do
+    resource :mou_signature, only: %i[new show create], path: "/govuh-forms-agreement", defaults: { agreement_type: :non_crown }, as: :non_crown_agreement_signature do
       get "/signed", to: "mou_signatures#confirmation", as: :confirmation
     end
   end
