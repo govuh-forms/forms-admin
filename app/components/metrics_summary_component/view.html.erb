@@ -1,6 +1,11 @@
 <div class="app-metrics">
   <h2 class="govuk-heading-l"><%= heading %></h2>
-  <% if error_message.present? %>
+  <% if submissions_only %>
+    <div class="govuk-inset-text">
+      <p>Recorded completed submissions for this form: <strong><%= weekly_submissions %></strong>.</p>
+      <p>Figures for forms started and completion rates are not available because the Forms event reporting service is not connected.</p>
+    </div>
+  <% elsif error_message.present? %>
     <div class="govuk-inset-text">
         <%= error_message.html_safe %>
     </div>
