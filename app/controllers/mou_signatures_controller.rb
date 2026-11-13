@@ -1,6 +1,6 @@
 class MouSignaturesController < WebController
   before_action :set_agreement_type
-  before_action :require_authorised_signatory, only: %i[new create]
+  before_action :require_authorised_signatory, only: :create
 
   def show
     return redirect_to new_path if @agreement_type == :non_crown
@@ -16,6 +16,7 @@ class MouSignaturesController < WebController
     return redirect_to show_path if already_signed?
 
     @mou_signature = MouSignature.new(organisation: current_user.organisation)
+    render :review unless authorised_signatory?
   end
 
   def create
@@ -70,14 +71,15 @@ class MouSignaturesController < WebController
     @create_path = create_path
   end
 
-  def require_authorised_signatory
-    return if @agreement_type == :non_crown && action_name == "new"
-    return if current_user.organisation_admin? && current_user.has_access? &&
-              current_user.organisation.present? &&
-              current_user.organisation.slug != "government-digital-service" &&
-              !acting_as?
+  def authorised_signatory?
+    current_user.organisation_admin? && current_user.has_access? &&
+      current_user.organisation.present? &&
+      current_user.organisation.slug != "government-digital-service" &&
+      !acting_as?
+  end
 
-    head :forbidden
+  def require_authorised_signatory
+    head :forbidden unless authorised_signatory?
   end
 
   def new_path
