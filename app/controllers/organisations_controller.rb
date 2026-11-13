@@ -18,7 +18,7 @@ class OrganisationsController < WebController
     @draft_form_counts = GroupForm.joins(:group, :form)
                                   .where(groups: { organisation_id: organisation_ids }, forms: { state: "draft" })
                                   .reorder(nil).group("groups.organisation_id").count
-    @agreement_types = MouSignature.where(organisation_id: organisation_ids)
+    @agreement_types = MouSignature.where(organisation_id: organisation_ids, accepted_document_version: MouSignature::CURRENT_CROWN_EDITION)
                                    .distinct
                                    .pluck(:organisation_id, :agreement_type)
                                    .group_by(&:first)

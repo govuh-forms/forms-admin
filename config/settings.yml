@@ -3,7 +3,7 @@ features:
   payment_links:
     enabled: false
   organisation_agreement:
-    enabled: false
+    enabled: true
   welsh_translation:
     enabled: false
   custom_branding:

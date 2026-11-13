@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_11_071702) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_13_220000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -267,8 +267,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_11_071702) do
     t.bigint "organisation_id", comment: "Organisation which user signed MOU on behalf of, or null"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false, comment: "User who signed MOU"
+    t.string "accepted_document_version"
+    t.string "document_sha256"
+    t.string "signatory_capacity"
+    t.boolean "authority_confirmed", default: false, null: false
+    t.index ["organisation_id", "agreement_type", "accepted_document_version"], name: "unique_current_form_agreement_per_organisation", unique: true, where: "(accepted_document_version IS NOT NULL)"
     t.index ["organisation_id"], name: "index_mou_signatures_on_organisation_id"
-    t.index ["user_id", "organisation_id"], name: "index_mou_signatures_on_user_id_and_organisation_id", unique: true, comment: "Users can only sign an MOU for an Organisation once"
     t.index ["user_id"], name: "index_mou_signatures_on_user_id"
     t.index ["user_id"], name: "index_mou_signatures_on_user_id_unique_without_organisation_id", unique: true, where: "(organisation_id IS NULL)", comment: "Users can only sign a single MOU without an organisation"
   end
@@ -342,6 +346,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_11_071702) do
 
   create_table "schema_info", id: false, force: :cascade do |t|
     t.integer "version", default: 0, null: false
+  end
+
+  create_table "support_enquiries", force: :cascade do |t|
+    t.string "reference", limit: 40, null: false
+    t.string "category", limit: 45, null: false
+    t.string "contact_name", limit: 150, null: false
+    t.string "contact_email", limit: 254
+    t.text "message", null: false
+    t.string "status", limit: 30, default: "open", null: false
+    t.text "staff_reply"
+    t.datetime "replied_at"
+    t.string "access_token_digest", limit: 64, null: false
+    t.string "handled_by", limit: 150
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "discord_contact", limit: 100
+    t.index ["access_token_digest"], name: "index_support_enquiries_on_access_token_digest", unique: true
+    t.index ["reference"], name: "index_support_enquiries_on_reference", unique: true
+    t.index ["status", "created_at"], name: "index_support_enquiries_on_status_and_created_at"
   end
 
   create_table "users", force: :cascade do |t|

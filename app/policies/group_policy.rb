@@ -30,7 +30,14 @@ class GroupPolicy < ApplicationPolicy
   alias_method :destroy?, :delete?
 
   def upgrade?
-    organisation_admin_or_super_admin? && (!Settings.features.organisation_agreement.enabled || record.organisation.mou_signatures.present?)
+    return false unless organisation_admin_or_super_admin?
+    return true unless Settings.features.organisation_agreement.enabled
+    return true if record.organisation.slug == "government-digital-service"
+
+    record.organisation.mou_signatures.where(
+      agreement_type: :crown,
+      accepted_document_version: MouSignature::CURRENT_CROWN_EDITION,
+    ).exists?
   end
 
   def add_group_admin?
@@ -60,7 +67,7 @@ private
       if user.super_admin?
         scope.all
       elsif user.organisation_admin?
-        scope.for_organisation(user.organisation)
+        scope.where(organisation_id: user.organisation_id).or(scope.where(id: user.groups.select(:id)))
       else
         scope.for_user(user)
       end

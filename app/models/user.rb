@@ -77,7 +77,6 @@ class User < ApplicationRecord
   validates :role, presence: true
   validates :organisation_id, presence: true, if: :requires_organisation?
   validates :has_access, inclusion: [true, false]
-  validates :role, exclusion: %w[organisation_admin], unless: :organisation_admin_assignment_allowed?
   validates :email, uniqueness: { case_sensitive: false }
 
   before_create do
@@ -110,7 +109,11 @@ class User < ApplicationRecord
   end
 
   def has_signed_current_organisation_mou?
-    mou_signatures.where(organisation: organisation || nil).exists?
+    return false unless organisation
+
+    mou_signatures.where(organisation:,
+                         agreement_type: :crown,
+                         accepted_document_version: MouSignature::CURRENT_CROWN_EDITION).exists?
   end
 
   def organisation_restricted_access?
@@ -120,7 +123,9 @@ class User < ApplicationRecord
   end
 
   def current_organisation_mou_signature
-    mou_signatures.find_by(organisation:)
+    mou_signatures.find_by(organisation:,
+                           agreement_type: :crown,
+                           accepted_document_version: MouSignature::CURRENT_CROWN_EDITION)
   end
 
   def can_administer_org?(org)
@@ -136,7 +141,11 @@ class User < ApplicationRecord
   end
 
   def current_org_has_mou?
-    organisation&.mou_signatures.present?
+    organisation.present? &&
+      organisation.mou_signatures.where(
+        agreement_type: :crown,
+        accepted_document_version: MouSignature::CURRENT_CROWN_EDITION,
+      ).exists?
   end
 
   def collect_analytics?
@@ -157,10 +166,6 @@ class User < ApplicationRecord
   end
 
 private
-
-  def organisation_admin_assignment_allowed?
-    !Settings.features.organisation_agreement.enabled || current_org_has_mou?
-  end
 
   def requires_name?
     name_was.present?
