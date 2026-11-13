@@ -1531,6 +1531,9 @@ en:
     date_range: "%{start_date} to %{end_date}"
     download_csv: Download a CSV of this form’s metrics (up to 14 months of data)
     errors:
+      not_configured_html: |
+        <p>Form usage statistics are not available because the reporting service is not connected.</p>
+        <p>This does not mean the form has received no submissions. No unverified figures are displayed.</p>
       error_loading_data_html: |
         <p>Sorry, there’s a problem getting your form’s metrics.</p>
         <p>Try again later.</p>
