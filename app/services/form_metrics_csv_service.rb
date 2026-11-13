@@ -28,7 +28,7 @@ class FormMetricsCsvService
   def self.compute_completion_rate(starts, completions)
     return I18n.t("metrics_csv.no_starts") if starts.zero?
 
-    sprintf("%.1f", (completions / starts * 100).round(1))
+    sprintf("%.1f", (completions.to_f / starts * 100).round(1))
   end
 
   def self.headers
