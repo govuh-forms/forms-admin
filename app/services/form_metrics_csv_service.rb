@@ -3,7 +3,14 @@ class FormMetricsCsvService
 
   def self.csv(form_id:, first_made_live_at:)
     start_time = [first_made_live_at.utc.beginning_of_day, MAXIMUM_LOOK_BACK.ago.utc.beginning_of_day].max
-    metrics_data = CloudWatchService.new(form_id).daily_metrics_data(start_time)
+    if CloudWatchService.available?
+      metrics_data = CloudWatchService.new(form_id).daily_metrics_data(start_time)
+    else
+      raise "Complete form metrics not yet available" unless RunnerSubmissionMetricsService.full_report_available?
+
+      start_time = [start_time, (RunnerSubmissionMetricsService.collection_start_date + 1.day).beginning_of_day].max
+      metrics_data = RunnerSubmissionMetricsService.new(form_id).daily_metrics_data(start_time)
+    end
     end_date = Time.zone.now.utc.to_date - 1
 
     CSV.generate do |csv|
