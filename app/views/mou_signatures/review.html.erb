@@ -1,0 +1,25 @@
+<% set_page_title(t("page_titles.mou_signature_new")) %>
+<% content_for :back_link, govuk_back_link_to(root_path, t("back_link.forms")) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l"><%= t("page_titles.mou_signature_new") %></h1>
+    <p class="govuk-body">Current edition: 20 October 2026</p>
+
+    <% if @current_user.super_admin? %>
+      <div class="govuk-inset-text">
+        You can review this agreement as a GOV.UH Forms platform administrator.
+        Acceptance on behalf of a participating organisation must be made by an authorised
+        representative of that organisation using its own organisation account.
+      </div>
+    <% else %>
+      <div class="govuk-inset-text">
+        You can read this agreement, but your current Forms account is not authorised
+        to accept it on behalf of your organisation. Contact your organisation administrator
+        if an acceptance is required.
+      </div>
+    <% end %>
+
+    <%= render "mou_version_current" %>
+  </div>
+</div>
