@@ -63,6 +63,21 @@ describe StepSummaryCardService do
       end
     end
 
+    context "with a date question missing answer settings in a live version" do
+      let(:page) { create :page, :with_date_settings, form:, input_type: "date_of_birth" }
+
+      before do
+        allow(form_document_step).to receive(:answer_settings).and_return(nil)
+      end
+
+      it "reports the missing settings without crashing the pages summary" do
+        expect(step_summary_card_service.all_options_for_answer_type).to include(
+          { key: { text: I18n.t("step_summary_card.answer_type") },
+            value: { text: I18n.t("step_summary_card.answer_settings_missing") } },
+        )
+      end
+    end
+
     context "with date of birth" do
       let(:page) { create :page, :with_date_settings, form:, input_type: "date_of_birth" }
 
