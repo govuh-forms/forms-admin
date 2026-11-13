@@ -29,20 +29,13 @@
     <% if @current_user.super_admin? %>
       <div class="govuk-!-margin-bottom-4">
         <%= form_with(model: @search_input, scope: :search, url: groups_path, method: 'get', local: true) do |f| %>
-          <%= render DfE::Autocomplete::View.new(
-            f,
-            attribute_name: :organisation_id,
-            form_field: f.govuk_collection_select(:organisation_id,
-                                                  Organisation.where(id: User.select(:organisation_id)).or(Organisation.where(id: Group.select(:organisation_id))).distinct.order(:name),
-                                                  :id,
-                                                  :name_with_abbreviation,
-                                                  class: ['govuk-!-width-three-quarters'],
-                                                  options: { prompt: t('groups.index.organisation_search.prompt') },
-                                                  label: { text: t('groups.index.organisation_search.label', organisation_name: @search_input.organisation.name), size: 'm', tag: 'h2' },
-                                                  hint: { text: t('groups.index.organisation_search.hint') },
-                                                  ),
-            html_attributes: { 'data-show-all-values' => 'true'},
-            )%>
+          <%= f.govuk_collection_select :organisation_id,
+                Organisation.where(id: User.select(:organisation_id)).or(Organisation.where(id: Group.select(:organisation_id))).distinct.order(:name),
+                :id, :name_with_abbreviation,
+                label: { text: t('groups.index.organisation_search.label', organisation_name: @search_input.organisation.name), size: 'm', tag: 'h2' },
+                hint: { text: t('groups.index.organisation_search.hint') },
+                options: { prompt: t('groups.index.organisation_search.prompt') },
+                class: ['govuk-!-width-three-quarters'] %>
           <%= f.govuk_submit(t("home.change_filter"), secondary: true) %>
         <% end %>
       </div>
@@ -76,5 +69,3 @@
     <% end %>
   </div>
 </div>
-
-<%= init_autocomplete_script(show_all_values: true, raw_attribute: false, source: false) %>

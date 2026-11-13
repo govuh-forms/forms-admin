@@ -5,12 +5,7 @@ feature "View groups", type: :feature do
   let!(:other_org) { create :organisation, slug: "other-org" }
   let!(:other_org_group) { create :group, organisation: other_org, name: "Group 2" }
 
-  before do
-    # Organisations only show in the autocomplete if they have at least one user
-    create :user, organisation: other_org
-  end
-
-  scenario "Super admin can use autocomplete to view other organisation's forms" do
+  scenario "Super admin can use the native selector to view a form-owning organisation without a separate user" do
     given_i_am_logged_in_as_a_super_admin
     and_i_am_on_the_groups_page
     then_i_should_see_the_groups_for_my_organisation
@@ -33,8 +28,7 @@ feature "View groups", type: :feature do
   end
 
   def when_i_change_the_organisation
-    fill_in "search-organisation-id-field", with: other_org.name.to_s
-    page.send_keys :enter
+    select other_org.name, from: "search[organisation_id]"
     click_button "Change"
   end
 

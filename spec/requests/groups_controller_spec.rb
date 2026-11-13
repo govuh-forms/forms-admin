@@ -124,6 +124,14 @@ RSpec.describe "/groups", type: :request do
         login_as_super_admin_user
       end
 
+      it "offers a native selector with organisations that own groups but have no users" do
+        get groups_url
+        selector = Nokogiri::HTML(response.body).at_css('select[name="search[organisation_id]"]')
+
+        expect(selector).not_to be_nil
+        expect(selector.css("option").map { |option| option["value"] }).to include(other_org.id.to_s)
+      end
+
       context "with an organisation search query" do
         let!(:other_org_active_groups) { create_list :group, 3, :active, organisation: other_org }
         let!(:other_org_upgrade_requested_groups) { create_list :group, 3, :upgrade_requested, organisation: other_org }
