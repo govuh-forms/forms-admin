@@ -1,0 +1,24 @@
+/* GOV.UH approved master identity assets in the native GOV.UK Forms layout. */
+/* The approved full-sized UH coat of arms is already in the native footer
+   copyright position. Suppress the inherited duplicate 32px decorative crown. */
+.govuk-footer__crown.uh-footer__crown {
+  display: none;
+}
+.uh-footer__copyright-link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  color: inherit;
+  gap: 6px;
+  max-width: 205px;
+  text-align: center;
+  text-decoration: none;
+}
+.uh-footer__coat-of-arms {
+  display: block;
+  width: 125px;
+  height: 112px;
+  object-fit: contain;
+}
+.uh-footer__copyright-text { text-decoration: underline; }
+.uh-footer__copyright-link:focus .uh-footer__copyright-text { text-decoration: none; }
