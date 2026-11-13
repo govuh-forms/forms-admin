@@ -1,0 +1,23 @@
+/* Forms Admin: same footer artwork and dimensions as the live GOV.UH footer.
+   Retain the native GOV.UK Forms and GOV.UK Frontend footer elements. */
+.govuk-footer__crown.uh-footer__crown {
+  display: block;
+  width: 32px;
+  height: 30px;
+  margin-bottom: 25px;
+  object-fit: contain;
+}
+.govuk-footer__copyright-logo::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 0;
+  padding-top: 112px;
+  background: transparent url("https://www.gov.uhrblx.com/uh-brand/uh-government-coat-of-arms-footer-20261016.webp") no-repeat center top !important;
+  background-size: auto 112px !important;
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+}
+.govuk-footer__copyright-logo {
+  text-align: center;
+}
