@@ -24,6 +24,7 @@ class NavigationItemsService
       your_groups_navigation_item,
       users_navigation_item,
       organisations_navigation_item,
+      mou_delegations_navigation_item,
       brands_navigation_item,
       reports_navigation_item,
       support_navigation_item,
@@ -52,6 +53,14 @@ private
     return nil unless should_show_organisations_link?
 
     NavigationItem.new(text: I18n.t("header.organisations"), href: organisations_path, active: false)
+  end
+
+  def mou_delegations_navigation_item
+    return nil unless Settings.features.organisation_agreement.enabled
+    return nil unless user.super_admin? || user.organisation_admin? ||
+                      MouDelegation.currently_valid.where(user:).exists?
+
+    NavigationItem.new(text: "MOU delegations", href: mou_delegations_path, active: false)
   end
 
   def brands_navigation_item

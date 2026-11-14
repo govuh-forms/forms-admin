@@ -256,6 +256,12 @@ Rails.application.routes.draw do
   resources :brands, only: %i[index show new create edit update]
 
   if Settings.features.organisation_agreement.enabled
+    resources :mou_delegations, path: "mou-delegations", only: %i[index new create] do
+      member do
+        patch :revoke
+      end
+    end
+
     resource :mou_signature, only: %i[new show create], path: "/memorandum-of-understanding", defaults: { agreement_type: :crown }, as: :mou_signature do
       get "/signed", to: "mou_signatures#confirmation", as: :confirmation
     end

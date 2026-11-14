@@ -44,6 +44,9 @@
   </ul>
 <% end %>
 
+<% if Settings.features.organisation_agreement.enabled %>
+  <h2 class="govuk-heading-m"><%= govuk_link_to "MOU delegations", mou_delegations_path %></h2>
+<% end %>
 <h2 class="govuk-heading-m"><%= link_to t("header.support"), support_url %></h2>
 <h2 class="govuk-heading-m"><%= link_to t("footer.accessibility_statement"), accessibility_statement_url %></h2>
 <h2 class="govuk-heading-m"><%= link_to t("footer.cookies"), cookies_url %></h2>

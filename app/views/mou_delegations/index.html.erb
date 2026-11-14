@@ -1,0 +1,59 @@
+<% set_page_title("MOU delegations") %>
+<% content_for :back_link, govuk_back_link_to(root_path, "Back") %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">MOU delegations</h1>
+    <p class="govuk-body">An organisation can authorise an administrator to accept its GOV.UH Forms Crown memorandum without granting access to its forms, submissions or publishing functions.</p>
+    <p class="govuk-body">Each delegation must be supported by a decision of the organisation and may be withdrawn. GOV.UH Forms records that decision reference but does not itself confer institutional authority.</p>
+    <% if @current_user.organisation_admin? && @current_user.has_access? && @current_user.organisation&.slug != "government-digital-service" && !acting_as? %>
+      <p class="govuk-body"><%= govuk_button_link_to "Record a delegation for your organisation", new_mou_delegation_path %></p>
+    <% end %>
+    <% if @delegations.empty? %>
+      <p class="govuk-inset-text">No MOU delegations are recorded for your account or, where applicable, your organisation.</p>
+    <% else %>
+      <% @delegations.each do |delegation| %>
+        <section class="govuk-!-margin-bottom-7">
+          <h2 class="govuk-heading-m"><%= delegation.organisation.name %></h2>
+          <%= govuk_summary_list(actions: false) do |list| %>
+            <% list.with_row do |row| %>
+              <% row.with_key { "Delegate" } %>
+              <% row.with_value { delegation.user.name.presence || delegation.user.email } %>
+            <% end %>
+            <% list.with_row do |row| %>
+              <% row.with_key { "Status" } %>
+              <% row.with_value { delegation.revoked_at? ? "Revoked" : (delegation.active? ? "Current" : "Expired or inactive") } %>
+            <% end %>
+            <% list.with_row do |row| %>
+              <% row.with_key { "Authority record" } %>
+              <% row.with_value { delegation.authority_reference } %>
+            <% end %>
+            <% list.with_row do |row| %>
+              <% row.with_key { "Authorising officer" } %>
+              <% row.with_value { delegation.authorising_officer_name } %>
+            <% end %>
+            <% list.with_row do |row| %>
+              <% row.with_key { "Scope" } %>
+              <% row.with_value { delegation.authority_scope } %>
+            <% end %>
+            <% list.with_row do |row| %>
+              <% row.with_key { "Expires" } %>
+              <% row.with_value { delegation.expires_on.to_fs(:long) } %>
+            <% end %>
+          <% end %>
+          <% if delegation.user_id == @current_user.id && delegation.active? %>
+            <p><%= govuk_link_to "Review the memorandum for #{delegation.organisation.name}", new_mou_signature_path(organisation_id: delegation.organisation_id) %></p>
+          <% end %>
+          <% if @current_user.organisation_admin? && @current_user.organisation_id == delegation.organisation_id && @current_user.has_access? && !acting_as? && delegation.revoked_at.nil? %>
+            <%= form_with url: revoke_mou_delegation_path(delegation), method: :patch do |f| %>
+              <%= label_tag "revocation_reason_#{delegation.id}", "Reason for withdrawing this delegation", class: "govuk-label" %>
+              <%= text_field_tag :revocation_reason, nil, id: "revocation_reason_#{delegation.id}", class: "govuk-input" %>
+              <%= f.govuk_submit "Revoke delegation", warning: true %>
+            <% end %>
+          <% end %>
+        </section>
+      <% end %>
+    <% end %>
+    <p class="govuk-body"><%= govuk_link_to "Review the current Crown memorandum", new_mou_signature_path %></p>
+  </div>
+</div>

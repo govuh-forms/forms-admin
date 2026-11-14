@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_11_13_220000) do
+ActiveRecord::Schema[8.1].define(version: 2026_11_14_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -261,6 +261,30 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_13_220000) do
     t.index ["user_id", "group_id"], name: "index_memberships_on_user_id_and_group_id", unique: true, comment: "Ensure that a user can only be a member of a group once"
   end
 
+  create_table "mou_delegations", force: :cascade do |t|
+    t.bigint "organisation_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "granted_by_id", null: false
+    t.bigint "revoked_by_id"
+    t.string "agreement_edition", null: false
+    t.string "authority_reference", limit: 500, null: false
+    t.string "authorising_officer_name", limit: 180, null: false
+    t.text "authority_scope", null: false
+    t.boolean "authority_confirmed", default: false, null: false
+    t.date "expires_on", null: false
+    t.datetime "revoked_at"
+    t.text "revocation_reason"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["granted_by_id"], name: "index_mou_delegations_on_granted_by_id"
+    t.index ["organisation_id", "user_id", "agreement_edition"], name: "index_current_mou_delegations_by_org_and_user", unique: true, where: "(revoked_at IS NULL)"
+    t.index ["organisation_id"], name: "index_mou_delegations_on_organisation_id"
+    t.index ["revoked_by_id"], name: "index_mou_delegations_on_revoked_by_id"
+    t.index ["user_id"], name: "index_mou_delegations_on_user_id"
+    t.check_constraint "expires_on > created_at::date", name: "mou_delegations_positive_term"
+    t.check_constraint "revoked_at IS NULL AND revoked_by_id IS NULL AND revocation_reason IS NULL OR revoked_at IS NOT NULL AND revoked_by_id IS NOT NULL AND length(TRIM(BOTH FROM revocation_reason)) > 0", name: "mou_delegations_complete_revocation"
+  end
+
   create_table "mou_signatures", comment: "User signatures of a memorandum of understanding (MOU) for an organisation", force: :cascade do |t|
     t.string "agreement_type", null: false
     t.datetime "created_at", null: false
@@ -271,6 +295,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_13_220000) do
     t.string "document_sha256"
     t.string "signatory_capacity"
     t.boolean "authority_confirmed", default: false, null: false
+    t.bigint "mou_delegation_id"
+    t.index ["mou_delegation_id"], name: "index_mou_signatures_on_mou_delegation_id"
     t.index ["organisation_id", "agreement_type", "accepted_document_version"], name: "unique_current_form_agreement_per_organisation", unique: true, where: "(accepted_document_version IS NOT NULL)"
     t.index ["organisation_id"], name: "index_mou_signatures_on_organisation_id"
     t.index ["user_id"], name: "index_mou_signatures_on_user_id"
@@ -421,6 +447,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_13_220000) do
   add_foreign_key "memberships", "groups"
   add_foreign_key "memberships", "users"
   add_foreign_key "memberships", "users", column: "added_by_id"
+  add_foreign_key "mou_delegations", "organisations"
+  add_foreign_key "mou_delegations", "users"
+  add_foreign_key "mou_delegations", "users", column: "granted_by_id"
+  add_foreign_key "mou_delegations", "users", column: "revoked_by_id"
+  add_foreign_key "mou_signatures", "mou_delegations", on_delete: :restrict
   add_foreign_key "mou_signatures", "organisations"
   add_foreign_key "mou_signatures", "users"
   add_foreign_key "organisation_brands", "brands"

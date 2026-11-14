@@ -10,6 +10,13 @@
     <% end %>
 
     <h1 class="govuk-heading-l"><%= page_title %></h1>
+    <% if @mou_signature.present? %>
+      <p class="govuk-body">Organisation: <strong><%= @mou_signature.organisation.name %></strong></p>
+      <p class="govuk-body">Accepted by: <%= @mou_signature.user.name.presence || @mou_signature.user.email %></p>
+      <% if @mou_signature.mou_delegation.present? %>
+        <p class="govuk-body">Authority: delegated administrator. Reference: <%= @mou_signature.mou_delegation.authority_reference %></p>
+      <% end %>
+    <% end %>
 
     <% if @agreement_type == :crown %>
       <%= render "mou_version_current" %>
