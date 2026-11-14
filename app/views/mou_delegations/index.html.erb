@@ -4,13 +4,11 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l">MOU delegations</h1>
-    <p class="govuk-body">An organisation can authorise an administrator to accept its GOV.UH Forms Crown memorandum without granting access to its forms, submissions or publishing functions.</p>
-    <p class="govuk-body">Each delegation must be supported by a decision of the organisation and may be withdrawn. GOV.UH Forms records that decision reference but does not itself confer institutional authority.</p>
     <% if @current_user.organisation_admin? && @current_user.has_access? && @current_user.organisation&.slug != "government-digital-service" && !acting_as? %>
       <p class="govuk-body"><%= govuk_button_link_to "Record a delegation for your organisation", new_mou_delegation_path %></p>
     <% end %>
     <% if @delegations.empty? %>
-      <p class="govuk-inset-text">No MOU delegations are recorded for your account or, where applicable, your organisation.</p>
+      <p class="govuk-body">No delegations.</p>
     <% else %>
       <% @delegations.each do |delegation| %>
         <section class="govuk-!-margin-bottom-7">
