@@ -5,6 +5,8 @@
   <div class="govuk-grid-column-two-thirds">
     <h1 class="govuk-heading-l"><%= t("page_titles.mou_signature_new") %></h1>
     <p class="govuk-body">Current edition: 20 October 2026</p>
+    <p class="govuk-body">Organisation being reviewed: <strong><%= @organisation.name %></strong></p>
+    <p class="govuk-body"><%= govuk_link_to "Review your MOU delegations", mou_delegations_path %></p>
 
     <% if @current_user.super_admin? %>
       <div class="govuk-inset-text">

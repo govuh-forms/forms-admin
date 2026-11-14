@@ -1,0 +1,20 @@
+<% set_page_title(title_with_error_prefix("Record an MOU delegation", @delegation.errors.any?)) %>
+<% content_for :back_link, govuk_back_link_to(mou_delegations_path) %>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-l">Record an MOU delegation</h1>
+    <p class="govuk-body">Organisation: <strong><%= @current_user.organisation.name %></strong></p>
+    <p class="govuk-body">This only authorises acceptance of the current GOV.UH Forms Crown memorandum on behalf of this organisation. It does not grant other service permissions.</p>
+    <%= form_with model: @delegation, url: mou_delegations_path do |f| %>
+      <%= f.govuk_error_summary %>
+      <%= f.govuk_email_field :delegate_email, label: { text: "Existing GOV.UH Forms account email" }, hint: { text: "The account must already exist and have access. Do not create a second account." } %>
+      <%= f.govuk_text_field :authorising_officer_name, label: { text: "Officer who authorised the delegation" } %>
+      <%= f.govuk_text_field :authority_reference, label: { text: "Institutional decision or delegation reference" }, hint: { text: "Enter a reference to the actual recorded decision, not a Forms group or user role." } %>
+      <%= f.govuk_text_area :authority_scope, label: { text: "Scope of the recorded authority" }, hint: { text: "Identify the power to accept this memorandum for the named organisation." } %>
+      <%= f.govuk_text_field :expires_on, label: { text: "Delegation expiry date (YYYY-MM-DD)" }, hint: { text: "Delegations must be time limited. Do not use an expired authority." } %>
+      <%= f.govuk_check_box :authority_confirmed, "1", "0", multiple: false, label: { text: "I confirm that my organisation has issued this delegation under its own competent authority, and that the reference above identifies its record." } %>
+      <%= f.govuk_submit "Record delegation" %>
+    <% end %>
+  </div>
+</div>

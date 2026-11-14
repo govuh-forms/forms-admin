@@ -9,6 +9,9 @@
 
       <h1 class="govuk-heading-l"><%= page_title %></h1>
       <p class="govuk-body">Organisation: <strong><%= @mou_signature.organisation.name %></strong></p>
+      <% if @delegation.present? && !directly_authorised? %>
+        <p class="govuk-inset-text">You are accepting this agreement under a recorded, organisation-specific delegation. Authority reference: <strong><%= @delegation.authority_reference %></strong>. This does not change your Forms group or publishing permissions.</p>
+      <% end %>
 
       <% if @agreement_type == :crown %>
         <%= render "mou_version_current" %>

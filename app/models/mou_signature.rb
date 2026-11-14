@@ -4,6 +4,7 @@ class MouSignature < ApplicationRecord
 
   belongs_to :user
   belongs_to :organisation, optional: true
+  belongs_to :mou_delegation, optional: true
 
   enum :agreement_type, {
     crown: "crown",
@@ -31,10 +32,19 @@ class MouSignature < ApplicationRecord
   private
 
   def authorised_organisation_signatory
-    unless crown? && user&.organisation_admin? && user.has_access? &&
-           organisation_id.present? && user.organisation_id == organisation_id &&
-           organisation&.slug != "government-digital-service"
-      errors.add(:base, "Only an authorised organisation representative can accept the memorandum")
+    direct = mou_delegation.nil? &&
+             user&.organisation_admin? && user.has_access? &&
+             organisation_id.present? && user.organisation_id == organisation_id &&
+             organisation&.slug != "government-digital-service"
+    delegated = mou_delegation.present? &&
+                mou_delegation.user_id == user_id &&
+                mou_delegation.organisation_id == organisation_id &&
+                mou_delegation.agreement_edition == accepted_document_version &&
+                mou_delegation.active? &&
+                user&.has_access?
+
+    unless crown? && (direct || delegated)
+      errors.add(:base, "Acceptance requires the organisation's authorised administrator or a current recorded delegation")
     end
   end
 end

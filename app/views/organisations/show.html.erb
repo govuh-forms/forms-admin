@@ -110,6 +110,7 @@
       <%= t("organisations.show.mou_signatures.share_mou_link_html", mou_link: link_to(mou_signature_url, mou_signature_url)) %>
 
       <p class="govuk-body">An agreement must be accepted by a representative authorised by the participating organisation. Group administrator access or platform super-administrator status alone does not confer that authority.</p>
+      <p class="govuk-body"><%= govuk_link_to "View delegated MOU authorities", mou_delegations_path %></p>
       <p class="govuk-body"><%= govuk_link_to "Read the status of non-Crown participation terms", new_non_crown_agreement_signature_path %></p>
     <% end %>
 
