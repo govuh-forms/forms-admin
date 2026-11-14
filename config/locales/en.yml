@@ -1533,7 +1533,6 @@ en:
     errors:
       not_configured_html: |
         <p>Form usage statistics are not available because the reporting service is not connected.</p>
-        <p>This does not mean the form has received no submissions. No unverified figures are displayed.</p>
       error_loading_data_html: |
         <p>Sorry, there’s a problem getting your form’s metrics.</p>
         <p>Try again later.</p>
@@ -2001,25 +2000,22 @@ en:
     submit_save: Save question
   payment_link_input:
     body_html: |
-      <p>GOV.UH Forms does not currently have a configured payment provider. Contact your organisation’s finance team before adding any payment arrangements to a form.</p>
-      <p>A payment link must not be published until your organisation has approved the service, checked the receiving account and confirmed how form references will be reconciled with payments.</p>
+      <p>Payment links are not currently available.</p>
     creating_your_payment_link:
-      body_html: Contact your organisation’s finance team to arrange an approved payment link.
+      body_html: Contact your organisation’s finance team to arrange payment.
       heading: Creating a payment link
     heading: Add a link to an approved payment service
     how_this_will_help_processors:
-      body_html: Form submission references can help your organisation reconcile payments with the associated forms.
+      body_html: Use submission references to reconcile payments.
       heading: How this helps people processing forms
     how_this_will_work:
-      body_html: |
-        <p>If a payment service has been approved and configured, the person completing the form will receive a payment link after submitting their form.</p>
-        <p>Do not rely on this step to collect a payment until the service and its receiving account have been tested.</p>
+      body_html: A payment link can appear after someone submits their form.
       heading: How payment links work
     set_up_your_payment_link:
-      body_html: Agree the payment reference and reconciliation arrangements with your organisation’s finance team.
+      body_html: Agree a payment reference with your finance team.
       heading: Set up your payment reference
     setting_up_govuk_pay:
-      body_html: GOV.UH Forms does not currently have a configured payment provider. Ask your organisation’s finance team about approved arrangements.
+      body_html: Payment links are not currently available.
       heading: Arranging a payment service
     submit_button: Save and continue
   phase_banner:
