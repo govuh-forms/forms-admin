@@ -31,6 +31,17 @@ class StepSummaryCardService
     options.concat(hint_options) if @step.hint_text.present?
     options.concat(generic_options) if @read_only && %w[address date text selection name].exclude?(@step.answer_type)
 
+    # Legacy live form versions may lack answer settings. Show that defect
+    # explicitly rather than making the entire staff Pages screen return 500.
+    if %w[address date text selection name].include?(@step.answer_type) && @step.answer_settings.nil?
+      options << {
+        key: { text: I18n.t("step_summary_card.answer_type") },
+        value: { text: I18n.t("step_summary_card.answer_settings_missing") },
+      }
+      options.concat(route_options) if @step.respond_to?(:routing_conditions) && @step.routing_conditions.present?
+      return options
+    end
+
     options.concat(selection_options) if @step.answer_type == "selection"
     options.concat(text_options) if @step.answer_type == "text"
     options.concat(date_options) if @step.answer_type == "date"
