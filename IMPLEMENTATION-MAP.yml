@@ -1,0 +1,48 @@
+product: govuh-forms-admin
+upstream: https://github.com/govuk-forms/forms-admin
+maintained: https://github.com/govuh-forms/forms-admin
+original_related_products:
+  - https://github.com/govuk-forms/forms-runner
+  - https://github.com/govuk-forms/forms-deploy
+  - https://github.com/govuk-forms/forms-e2e-tests
+implementation_class: Exact UK adoption with necessary UH service adaptations
+technical_owner: Government Digital Service / GOV.UH Forms
+substantive_owner: competent government department, office or service owning each form
+users:
+  - authorised form creators and editors
+  - authorised form reviewers and publishers
+  - authorised receiving institutions
+records:
+  editorial: approved form schemas, versions, status, creator/audit metadata
+  submission: native Forms delivery/receipt reference
+  casework: institution-owned external records system, not Forms Admin
+integrations:
+  forms_runner: published applicant journeys
+  approved_delivery: configured receiving system or supported confidential email/JSON/CSV integration
+  public_guidance: institution-owned start pages published with native GOV.UH publisher
+  account_authorisation: forms-specific authenticated editorial access
+requirements:
+  - native review and publish rights
+  - institution-approved privacy notice and data minimisation
+  - receiving recipient, protected record and failed-delivery recovery
+  - preservation and reconciliation of old submissions and references
+  - accessible public guidance and Runner form flow
+  - original GOV.UK form repository provenance and release trace
+not_authorised_by_form:
+  - ministerial or Civil Service appointment
+  - immigration permission or nationality/citizenship status
+  - police/court decision or enforceable restriction
+acceptance:
+  - real signed-in publisher and role checks
+  - create, edit, preview, review and publish lifecycle
+  - live Runner validation and confirmation
+  - unique submission reference and authorised service receipt
+  - real downstream handling and records reconciliation
+  - denial tests and security/privacy assurance
+  - backup restoration and rollback verification
+verified_observations_2026_10_15:
+  native_admin_container: running
+  previously_published_nes_runner_form: reachable
+  ministerial_form_1: HTTP_404
+  service_specific_end_to_end_acceptance: not_verified
+  general_production_acceptance: not_certified_by_this_file
